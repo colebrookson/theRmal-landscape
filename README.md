@@ -1,4 +1,4 @@
-# Resource-limited Thermal Infection Landscapes (`theRmal-landscape`)
+# Resource-limited Thermal Infection Landscapes
 
 This repository contains the code and analysis for a project trying to identify mechanistic patterns in how resource allocations and thermal limits affects host distribution on a landscape, and subsequent disease transmission dynamics. 
 
