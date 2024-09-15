@@ -1,12 +1,57 @@
 ---
-title: 
+title: Variation in thermal pressures and resource availability drives disease dynamics 
+format: 
+  pdf:
+    toc: true
+    number-sections: true
+    colorlinks: true
 authors:
   - name: Cole Brookson
     affiliation: Yale University
     roles: conceptualization, writing, analysis
     corresponding: true
+  - name: David Vasseur
+    affiliation: Yale University 
+    roles: conceptualization, writing, analysis
+    corresponding: false
 bibliography: theRmal-landscape.bib
 ---
 
 ## Model
 
+@vintonResourceLimitationDetermines2022 provide a basic model for temperature-dependent consumer-resource dynamics with a chemostat model of resource, $R$, supply, given by 
+
+\begin{equation}
+\label{eq:resource-growth}
+\frac{dR}{dt} = D(S-R) - f(R,T)C,
+\end{equation}
+
+where there is an inflow density $S$ and an outflow rate $D$ and $f(R,T)$ i the functional response of $R$ with respect to temperature $T$. The biomass change of the consumer $C$ is given by 
+
+\begin{equation}
+\label{eq:consumer-growth}
+\frac{dC}{dt} = (1 - \delta)f(R,T) - m(T)C,
+\end{equation}
+
+where $(1-\delta)$ is the consumption efficiency (denoted as a fraction), and $m$ is the rate of respiration. W assume a Boltzmann-Arrhenius relationship and approximate that function $m(T)$ with 
+
+\begin{equation}
+\label{eq:respiration-rate}
+m(T) = m_ae^{m_bT} + m_c,
+\end{equation}
+
+with $m_a$, $m_b$ and $m_c$ all $>0$. The functional response is a standard type II, with attack rate $a$, handling rate $(1/h)$, but re-state according to the Michaelis-Menten form of 
+
+\begin{equation}
+\label{eq:functional-response}
+f(R,T) = I_{max}(T) \times \frac{R}{R + R_{\text{half}}},
+\end{equation}
+
+and $I_{max}T$ is the maximum uptake rate which we state as equivalent to the handling rate $I_{max}T \equiv 1/h$, and then the half-saturation density is made equivalnt via $R_{\text{half}} \equiv \frac{1}{a \times h}$. Note that the resource saturation is reached by $R / (R_{\text{half}} + R)$, which is independent of $I_{max}$. Last, 
+
+\begin{equation}
+\label{eq:i-max}
+I_{max}(T) = e^{-(T-T_I)^2\gamma},
+\end{equation}
+
+is the equation governing the relationship with temperature, where $T_I$ is the optimum temperature for consumption, and $\gamma$ is the breadth of response. 
