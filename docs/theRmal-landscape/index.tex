@@ -43,14 +43,28 @@
 \setlength{\emergencystretch}{3em} % prevent overfull lines
 \setcounter{secnumdepth}{5}
 % Make \paragraph and \subparagraph free-standing
+\makeatletter
 \ifx\paragraph\undefined\else
   \let\oldparagraph\paragraph
-  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
 \fi
 \ifx\subparagraph\undefined\else
   \let\oldsubparagraph\subparagraph
-  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
 \fi
+\makeatother
 
 
 \providecommand{\tightlist}{%
@@ -153,6 +167,7 @@
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
+
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
@@ -169,6 +184,7 @@
   urlcolor={Blue},
   pdfcreator={LaTeX via pandoc}}
 
+
 \title{Variation in thermal pressures and resource availability drives
 disease dynamics}
 \author{Cole Brookson \and David Vasseur}
@@ -183,6 +199,7 @@ disease dynamics}
 \setcounter{tocdepth}{3}
 \tableofcontents
 }
+
 \section{Model}\label{model}
 
 Vinton and Vasseur (2022) provide a basic model for
@@ -204,7 +221,7 @@ temperature \(T\). The biomass change of the consumer \(C\) is given by
 \end{equation}
 
 where \((1-\delta)\) is the consumption efficiency (denoted as a
-fraction), and \(m\) is the rate of respiration. W assume a
+fraction), and \(m\) is the rate of respiration. We assume a
 Boltzmann-Arrhenius relationship and approximate that function \(m(T)\)
 with
 
@@ -238,6 +255,9 @@ is the equation governing the relationship with temperature, where
 \(T_I\) is the optimum temperature for consumption, and \(\gamma\) is
 the breadth of response.
 
+\section*{Equilibrium Solutions}\label{equilibrium-solutions}
+\addcontentsline{toc}{section}{Equilibrium Solutions}
+
 \phantomsection\label{refs}
 \begin{CSLReferences}{1}{0}
 \bibitem[\citeproctext]{ref-vintonResourceLimitationDetermines2022}
@@ -247,6 +267,7 @@ Models.''} \emph{Ecology Letters} 25 (10): 2142--55.
 \url{https://doi.org/10.1111/ele.14086}.
 
 \end{CSLReferences}
+
 
 
 
