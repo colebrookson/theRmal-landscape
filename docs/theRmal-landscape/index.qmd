@@ -173,6 +173,10 @@ ggplot2::ggplot(
 Now we do it drawing distributions and we can look at the equilibrium conditions: 
 
 ```{r, echo=TRUE}
+library(plot3D)
+library(reshape2)
+library(plotly)
+
 consumer_equil_resource_model <- function(time, state, parameters) {
     R <- state[1]
     C <- state[2]
@@ -207,7 +211,7 @@ consumer_equil_resource_model <- function(time, state, parameters) {
 S_mean <- 1.5
 S_sd <- 0.2
 T_mean <- 20
-T_sd <- 1
+T_sd <- 1.5
 
 # Set other model parameters (fixed values)
 parameters_base <- c(
@@ -230,12 +234,93 @@ state <- c(R = 1, C = 0.5)
 times <- seq(0, 500, by = 0.1) # Extended time for equilibrium
 
 # Number of draws for S and T
-num_draws <- 100
+num_draws <- 1000
 
-# Storage for equilibrium C values
-equilibrium_C <- numeric(num_draws)
-T_vals <- numeric(num_draws)
-S_vals <- numeric(num_draws)
+# Storage for equilibrium C values, and the corresponding T and S values
+results <- data.frame(
+    S = numeric(num_draws),
+    T = numeric(num_draws),
+    C = numeric(num_draws)
+)
+
+# Run the simulation for each draw
+for (i in 1:num_draws) {
+    # Draw random values for S and T from normal distributions
+    parameters <- parameters_base
+    parameters["S"] <- rnorm(1, mean = S_mean, sd = S_sd)
+    parameters["T"] <- rnorm(1, mean = T_mean, sd = T_sd)
+
+    # Run the simulation
+    output <- ode(y = state, times = times, 
+    func = consumer_resource_model, parms = parameters)
+
+    # Store the final values of S, T, and the equilibrium value of C
+    results$S[i] <- parameters["S"]
+    results$T[i] <- parameters["T"]
+    results$C[i] <- tail(output[, "C"], n = 1) # Equilibrium value of C
+}
+
+# Plot the relationship between C and T
+ggplot(results, aes(x = T, y = C)) +
+    geom_point() +
+    geom_smooth(method = "loess", se = FALSE) +
+    labs(x = "Temperature (T)", y = "Consumer Biomass (C)") +
+    theme_bw() +
+    theme(
+        text = element_text(size = 18),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        strip.background = element_blank()
+    )
+
+# Plot the relationship between C and S
+ggplot(results, aes(x = S, y = C)) +
+    geom_point() +
+    geom_smooth(method = "loess", se = FALSE) +
+    labs(x = "Resource Inflow (S)", y = "Consumer Biomass (C)") +
+    theme_bw() +
+    theme(
+        text = element_text(size = 18),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        strip.background = element_blank()
+    )
+ggplot(results)  + 
+    geom_histogram(aes(x = C), fill = "blue") + 
+    theme_bw() +
+    theme(
+        text = element_text(size = 18),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        strip.background = element_blank()
+    )
+# 3D plot of C with respect to both T and S
+scatter3D(
+    x = results$T, y = results$S, z = results$C,
+    pch = 19, cex = 1.2, colkey = TRUE,
+    main = "3D plot of C vs T and S",
+    xlab = "Temperature (T)", ylab = "Resource Inflow (S)", 
+    zlab = "Consumer Biomass (C)",
+    theta = 40, phi = 20
+)
+# # Create a 2D grid of T and S
+# plot_matrix <- t(reshape2::acast(results, S~T, value.var="C"))
+# d_df <- as.matrix(results[, c("C", "S", "T")], rownames.force = NA)
+# plot_ly(z=~d_df) %>% add_surface()
+
+# plotly::plot_ly(
+#       z=~d_df
+#     ) %>% 
+#   add_surface() %>%
+#   layout(
+#     title = "",
+#     scene = list(
+#       xaxis = list(title = "S"),
+#       yaxis = list(title = "T"),
+#       zaxis = list(title = "C"),
+#       camera = list(eye = list(x = 1.95, y = -1.25, z = 1.25))
+#     ))
+
 
 
 ```

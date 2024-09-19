@@ -411,6 +411,14 @@ conditions:
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(plot3D)}
+\FunctionTok{library}\NormalTok{(reshape2)}
+\FunctionTok{library}\NormalTok{(plotly)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \NormalTok{consumer\_equil\_resource\_model }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(time, state, parameters) \{}
 \NormalTok{    R }\OtherTok{\textless{}{-}}\NormalTok{ state[}\DecValTok{1}\NormalTok{]}
 \NormalTok{    C }\OtherTok{\textless{}{-}}\NormalTok{ state[}\DecValTok{2}\NormalTok{]}
@@ -445,7 +453,7 @@ conditions:
 \NormalTok{S\_mean }\OtherTok{\textless{}{-}} \FloatTok{1.5}
 \NormalTok{S\_sd }\OtherTok{\textless{}{-}} \FloatTok{0.2}
 \NormalTok{T\_mean }\OtherTok{\textless{}{-}} \DecValTok{20}
-\NormalTok{T\_sd }\OtherTok{\textless{}{-}} \DecValTok{1}
+\NormalTok{T\_sd }\OtherTok{\textless{}{-}} \FloatTok{1.5}
 
 \CommentTok{\# Set other model parameters (fixed values)}
 \NormalTok{parameters\_base }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}
@@ -468,12 +476,119 @@ conditions:
 \NormalTok{times }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{500}\NormalTok{, }\AttributeTok{by =} \FloatTok{0.1}\NormalTok{) }\CommentTok{\# Extended time for equilibrium}
 
 \CommentTok{\# Number of draws for S and T}
-\NormalTok{num\_draws }\OtherTok{\textless{}{-}} \DecValTok{100}
+\NormalTok{num\_draws }\OtherTok{\textless{}{-}} \DecValTok{1000}
 
-\CommentTok{\# Storage for equilibrium C values}
-\NormalTok{equilibrium\_C }\OtherTok{\textless{}{-}} \FunctionTok{numeric}\NormalTok{(num\_draws)}
-\NormalTok{T\_vals }\OtherTok{\textless{}{-}} \FunctionTok{numeric}\NormalTok{(num\_draws)}
-\NormalTok{S\_vals }\OtherTok{\textless{}{-}} \FunctionTok{numeric}\NormalTok{(num\_draws)}
+\CommentTok{\# Storage for equilibrium C values, and the corresponding T and S values}
+\NormalTok{results }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+    \AttributeTok{S =} \FunctionTok{numeric}\NormalTok{(num\_draws),}
+    \AttributeTok{T =} \FunctionTok{numeric}\NormalTok{(num\_draws),}
+    \AttributeTok{C =} \FunctionTok{numeric}\NormalTok{(num\_draws)}
+\NormalTok{)}
+
+\CommentTok{\# Run the simulation for each draw}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{num\_draws) \{}
+    \CommentTok{\# Draw random values for S and T from normal distributions}
+\NormalTok{    parameters }\OtherTok{\textless{}{-}}\NormalTok{ parameters\_base}
+\NormalTok{    parameters[}\StringTok{"S"}\NormalTok{] }\OtherTok{\textless{}{-}} \FunctionTok{rnorm}\NormalTok{(}\DecValTok{1}\NormalTok{, }\AttributeTok{mean =}\NormalTok{ S\_mean, }\AttributeTok{sd =}\NormalTok{ S\_sd)}
+\NormalTok{    parameters[}\StringTok{"T"}\NormalTok{] }\OtherTok{\textless{}{-}} \FunctionTok{rnorm}\NormalTok{(}\DecValTok{1}\NormalTok{, }\AttributeTok{mean =}\NormalTok{ T\_mean, }\AttributeTok{sd =}\NormalTok{ T\_sd)}
+
+    \CommentTok{\# Run the simulation}
+\NormalTok{    output }\OtherTok{\textless{}{-}} \FunctionTok{ode}\NormalTok{(}\AttributeTok{y =}\NormalTok{ state, }\AttributeTok{times =}\NormalTok{ times, }
+    \AttributeTok{func =}\NormalTok{ consumer\_resource\_model, }\AttributeTok{parms =}\NormalTok{ parameters)}
+
+    \CommentTok{\# Store the final values of S, T, and the equilibrium value of C}
+\NormalTok{    results}\SpecialCharTok{$}\NormalTok{S[i] }\OtherTok{\textless{}{-}}\NormalTok{ parameters[}\StringTok{"S"}\NormalTok{]}
+\NormalTok{    results}\SpecialCharTok{$}\NormalTok{T[i] }\OtherTok{\textless{}{-}}\NormalTok{ parameters[}\StringTok{"T"}\NormalTok{]}
+\NormalTok{    results}\SpecialCharTok{$}\NormalTok{C[i] }\OtherTok{\textless{}{-}} \FunctionTok{tail}\NormalTok{(output[, }\StringTok{"C"}\NormalTok{], }\AttributeTok{n =} \DecValTok{1}\NormalTok{) }\CommentTok{\# Equilibrium value of C}
+\NormalTok{\}}
+
+\CommentTok{\# Plot the relationship between C and T}
+\FunctionTok{ggplot}\NormalTok{(results, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ T, }\AttributeTok{y =}\NormalTok{ C)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+    \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =} \StringTok{"loess"}\NormalTok{, }\AttributeTok{se =} \ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Temperature (T)"}\NormalTok{, }\AttributeTok{y =} \StringTok{"Consumer Biomass (C)"}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{theme\_bw}\NormalTok{() }\SpecialCharTok{+}
+    \FunctionTok{theme}\NormalTok{(}
+        \AttributeTok{text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{18}\NormalTok{),}
+        \AttributeTok{panel.grid.major =} \FunctionTok{element\_blank}\NormalTok{(),}
+        \AttributeTok{panel.grid.minor =} \FunctionTok{element\_blank}\NormalTok{(),}
+        \AttributeTok{strip.background =} \FunctionTok{element\_blank}\NormalTok{()}
+\NormalTok{    )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{index_files/figure-pdf/unnamed-chunk-2-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Plot the relationship between C and S}
+\FunctionTok{ggplot}\NormalTok{(results, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ S, }\AttributeTok{y =}\NormalTok{ C)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+    \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =} \StringTok{"loess"}\NormalTok{, }\AttributeTok{se =} \ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Resource Inflow (S)"}\NormalTok{, }\AttributeTok{y =} \StringTok{"Consumer Biomass (C)"}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{theme\_bw}\NormalTok{() }\SpecialCharTok{+}
+    \FunctionTok{theme}\NormalTok{(}
+        \AttributeTok{text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{18}\NormalTok{),}
+        \AttributeTok{panel.grid.major =} \FunctionTok{element\_blank}\NormalTok{(),}
+        \AttributeTok{panel.grid.minor =} \FunctionTok{element\_blank}\NormalTok{(),}
+        \AttributeTok{strip.background =} \FunctionTok{element\_blank}\NormalTok{()}
+\NormalTok{    )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{index_files/figure-pdf/unnamed-chunk-2-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(results)  }\SpecialCharTok{+} 
+    \FunctionTok{geom\_histogram}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ C), }\AttributeTok{fill =} \StringTok{"blue"}\NormalTok{) }\SpecialCharTok{+} 
+    \FunctionTok{theme\_bw}\NormalTok{() }\SpecialCharTok{+}
+    \FunctionTok{theme}\NormalTok{(}
+        \AttributeTok{text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{18}\NormalTok{),}
+        \AttributeTok{panel.grid.major =} \FunctionTok{element\_blank}\NormalTok{(),}
+        \AttributeTok{panel.grid.minor =} \FunctionTok{element\_blank}\NormalTok{(),}
+        \AttributeTok{strip.background =} \FunctionTok{element\_blank}\NormalTok{()}
+\NormalTok{    )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{index_files/figure-pdf/unnamed-chunk-2-3.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# 3D plot of C with respect to both T and S}
+\FunctionTok{scatter3D}\NormalTok{(}
+    \AttributeTok{x =}\NormalTok{ results}\SpecialCharTok{$}\NormalTok{T, }\AttributeTok{y =}\NormalTok{ results}\SpecialCharTok{$}\NormalTok{S, }\AttributeTok{z =}\NormalTok{ results}\SpecialCharTok{$}\NormalTok{C,}
+    \AttributeTok{pch =} \DecValTok{19}\NormalTok{, }\AttributeTok{cex =} \FloatTok{1.2}\NormalTok{, }\AttributeTok{colkey =} \ConstantTok{TRUE}\NormalTok{,}
+    \AttributeTok{main =} \StringTok{"3D plot of C vs T and S"}\NormalTok{,}
+    \AttributeTok{xlab =} \StringTok{"Temperature (T)"}\NormalTok{, }\AttributeTok{ylab =} \StringTok{"Resource Inflow (S)"}\NormalTok{, }
+    \AttributeTok{zlab =} \StringTok{"Consumer Biomass (C)"}\NormalTok{,}
+    \AttributeTok{theta =} \DecValTok{40}\NormalTok{, }\AttributeTok{phi =} \DecValTok{20}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{index_files/figure-pdf/unnamed-chunk-2-4.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# \# Create a 2D grid of T and S}
+\CommentTok{\# plot\_matrix \textless{}{-} t(reshape2::acast(results, S\textasciitilde{}T, value.var="C"))}
+\CommentTok{\# d\_df \textless{}{-} as.matrix(results[, c("C", "S", "T")], rownames.force = NA)}
+\CommentTok{\# plot\_ly(z=\textasciitilde{}d\_df) \%\textgreater{}\% add\_surface()}
+
+\CommentTok{\# plotly::plot\_ly(}
+\CommentTok{\#       z=\textasciitilde{}d\_df}
+\CommentTok{\#     ) \%\textgreater{}\% }
+\CommentTok{\#   add\_surface() \%\textgreater{}\%}
+\CommentTok{\#   layout(}
+\CommentTok{\#     title = "",}
+\CommentTok{\#     scene = list(}
+\CommentTok{\#       xaxis = list(title = "S"),}
+\CommentTok{\#       yaxis = list(title = "T"),}
+\CommentTok{\#       zaxis = list(title = "C"),}
+\CommentTok{\#       camera = list(eye = list(x = 1.95, y = {-}1.25, z = 1.25))}
+\CommentTok{\#     ))}
 \end{Highlighting}
 \end{Shaded}
 

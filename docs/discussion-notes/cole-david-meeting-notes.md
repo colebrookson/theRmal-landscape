@@ -18,3 +18,12 @@ Overall, discussed first steps and how to begin tackling the problem. General qu
     * some nice things come from Jensen's inequality does where you start your infection (spatially, i.e. like a patch have an effect on what the dynamics end up looking like) 
     * the key would be to solve the two equilibrium solutions for variation in S and T (temperature) 
     * first pass, bruke force loop through this calculation and draw S from some random distribution, draw $T$ from some set, and then what is the resultant $C$ -- the negative value of $C$ is just the $C = 0$, -- if you only imagine a tiny bit of variation, you'll see something pretty different
+
+
+## 
+
+* there's a distributional transform option in mathematica that I might be able to try to get better 
+* mathematica isn't going to give you output over the range you ask for 
+* david to send some learning templates 
+* some notational things that are worth learning as well 
+* 
