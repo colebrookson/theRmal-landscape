@@ -33,7 +33,7 @@ where there is an inflow density $S$ and an outflow rate $D$ and $f(R,T)$ i the 
 \frac{dC}{dt} = (1 - \delta)f(R,T) - m(T)C,
 \end{equation}
 
-where $(1-\delta)$ is the consumption efficiency (denoted as a fraction), and $m$ is the rate of respiration. W assume a Boltzmann-Arrhenius relationship and approximate that function $m(T)$ with 
+where $(1-\delta)$ is the consumption efficiency (denoted as a fraction), and $m$ is the rate of respiration. We assume a Boltzmann-Arrhenius relationship and approximate that function $m(T)$ with 
 
 \begin{equation}
 \label{eq:respiration-rate}
