@@ -79,136 +79,8 @@
 \end{enumerate}
 
 
-\section{Probability Problem Statement}
-
-Consider the following setup:
-\begin{itemize}
-    \item There are two sets of objects: \( S \) with size \( n_S \) and \( I \) with size \( n_I \), where \( n_S, n_I > 0 \).
-    \item There is a set \( G \) of locations, with size \( n_G \).
-    \item Each object from both \( S \) and \( I \) is independently placed at location \( G_i \) with probability \( w_i \).
-    \item If at least one object from \( S \) and at least one object from \( I \) are placed at the same location \( G_i \), an event \( E \) occurs at \( G_i \) with probability \( \epsilon_i \).
-\end{itemize}
-
-We derive:
-\begin{enumerate}
-    \item The probability that \( E \) occurs at a specific location \( i \).
-    \item The probability that \( E \) occurs at least once at any location in \( G \).
-\end{enumerate}
-
-We consider three cases:
-\begin{enumerate}
-    \item General case: Any \( n_I \) and any \( n_S \).
-    \item Special case: \( n_I = 1 \), any \( n_S \).
-    \item Special case: \( n_I = 1 \), \( n_S = 1 \).
-\end{enumerate}
-
-\section{General Case: Any \( n_I \) and \( n_S \)}
-
-\subsection{Probability of \( E \) at Location \( i \)}
-
-Define \( S_i \) and \( I_i \) as the number of objects from \( S \) and \( I \) that land at location \( G_i \). Since each object chooses \( G_i \) with probability \( w_i \), we have:
-
-\[
-S_i \sim \text{Binomial}(n_S, w_i), \quad I_i \sim \text{Binomial}(n_I, w_i).
-\]
-
-The probability that at least one object from \( S \) and at least one object from \( I \) land at \( G_i \) is:
-
-\[
-P(S_i \geq 1, I_i \geq 1) = 1 - P(S_i = 0) - P(I_i = 0) + P(S_i = 0, I_i = 0).
-\]
-
-Since the binomial probability mass function gives:
-
-\[
-P(S_i = 0) = (1 - w_i)^{n_S}, \quad P(I_i = 0) = (1 - w_i)^{n_I},
-\]
-
-and since placements are independent,
-
-\[
-P(S_i = 0, I_i = 0) = P(S_i = 0) P(I_i = 0) = (1 - w_i)^{n_S + n_I}.
-\]
-
-Thus,
-
-\[
-P(S_i \geq 1, I_i \geq 1) = 1 - (1 - w_i)^{n_S} - (1 - w_i)^{n_I} + (1 - w_i)^{n_S + n_I}.
-\]
-
-Given this overlap, \( E \) occurs with probability \( \epsilon_i \), so:
-
-\[
-P(E_i) = \epsilon_i \left[ 1 - (1 - w_i)^{n_S} - (1 - w_i)^{n_I} + (1 - w_i)^{n_S + n_I} \right].
-\]
-
-\subsection{Probability of \( E \) at Any Location}
-
-Since locations are independent, the probability that \( E \) does not occur at any location is:
-
-\[
-\prod_{i=1}^{n_G} \left( 1 - P(E_i) \right).
-\]
-
-Thus, the probability that \( E \) occurs at least once is:
-
-\[
-P(E_{\text{any}}) = 1 - \prod_{i=1}^{n_G} \left( 1 - P(E_i) \right).
-\]
-
-\section{Special Case: \( n_I = 1 \), Any \( n_S \)}
-
-\subsection{Probability of \( E \) at Location \( i \)}
-
-Setting \( n_I = 1 \) in the general formula:
-
-\[
-P(E_i) = \epsilon_i \left[ 1 - (1 - w_i)^{n_S} - (1 - w_i) + (1 - w_i)^{n_S + 1} \right].
-\]
-
-Rearranging terms:
-
-\[
-P(E_i) = \epsilon_i \left[ w_i - (1 - w_i)^{n_S} + (1 - w_i)^{n_S + 1} \right].
-\]
-
-Factoring:
-
-\[
-P(E_i) = \epsilon_i w_i \left[ 1 - (1 - w_i)^{n_S} \right].
-\]
-
-\subsection{Probability of \( E \) at Any Location}
-
-\[
-P(E_{\text{any}}) = 1 - \prod_{i=1}^{n_G} \left( 1 - \epsilon_i w_i \left( 1 - (1 - w_i)^{n_S} \right) \right).
-\]
-
-\section{Special Case: \( n_I = 1 \), \( n_S = 1 \)}
-
-\subsection{Probability of \( E \) at Location \( i \)}
-
-If \( n_I = 1 \) and \( n_S = 1 \), we substitute into the previous formula:
-
-\[
-P(E_i) = \epsilon_i w_i \left[ 1 - (1 - w_i) \right].
-\]
-
-Since \( 1 - (1 - w_i) = w_i \), we get:
-
-\[
-P(E_i) = \epsilon_i w_i^2.
-\]
-
-\subsection{Probability of \( E \) at Any Location}
-
-\[
-P(E_{\text{any}}) = 1 - \prod_{i=1}^{n_G} \left( 1 - \epsilon_i w_i^2 \right).
-\]
-
-
-
-
+\subsection{30 January 2025}
+\textbf{Notes:}
 \begin{itemize}
     \item code up a set of 100 patches with $w_ij= 1/100$ and just see what we get 
     \item random placement of individuals and see how frequently you get co-location, and then see which of the equations are right -- many many simulations
@@ -216,4 +88,16 @@ P(E_{\text{any}}) = 1 - \prod_{i=1}^{n_G} \left( 1 - \epsilon_i w_i^2 \right).
     \item they should converge -- just need to do it many many times over 
     \item choose a random value out of the list given the weights and that's where your S lands, and then do it again for as many S's as you have, then do it again for the I -- see is what you chose randomly for your I individual is the same as where the S's are -- if it does then that's a "yes" and we can do this 1 million times 
 \end{itemize}
+\textbf{Next Steps:}
+\begin{enumerate}
+    \item Cole will code up a set of simulations to see if our derivation is correct, by using a set of w values that are the same (100 cells), and checking if the predicted values from our derivation 
+    \item then Cole will repeat this with some heterogeneous options. using this pseudocode 
+\end{enumerate}
+\begin{figure}[!hpt]
+    \centering
+    \includegraphics[width=0.65\linewidth]{man/notes-figs/20250130-pseudocode.jpg}
+    \caption{Psuedocode of how to do the simulation to check equivalency stuff, particularly the choice of the where the random values go for S and I -- the random placement}
+    \label{}
+\end{figure}
+
 \end{document}

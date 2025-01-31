@@ -1,0 +1,167 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}
+ \geometry{
+ letterpaper,
+ left=1in,
+ right=1in,
+ top=1in,
+ bottom=1in
+ }
+\usepackage[utf8]{inputenc}
+
+\usepackage[super,sort&compress,numbers]{natbib}
+\bibliographystyle{naturemag}
+%\bibliographystyle{plainnat} %abbrv, acm, alpha, apalike, ieeetr, plain, siam, unsrt
+\usepackage{url}
+\urlstyle{same}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{setspace}
+\usepackage[skip=10pt, indent=20pt]{parskip}
+\usepackage{changepage}
+\usepackage[normalem]{ulem}
+\usepackage{arydshln}
+\usepackage[font=small] {caption}
+\usepackage{subcaption}
+\usepackage{chngcntr}
+\usepackage{wrapfig}
+\usepackage{sidecap}
+\sidecaptionvpos{figure}{c} 
+\usepackage{amsmath,amssymb,amsthm} % AMS styles for extra equation formatting
+\usepackage{cleveref}
+\renewcommand\thesection{\Roman{section}}
+\renewcommand\thesubsection{\thesection.\arabic{subsection}}
+\begin{document}
+
+\section{An attempt at a slightly different derivation for our probability problem}
+
+\section{Probability Problem Statement}
+
+Consider the following setup:
+\begin{itemize}
+    \item There are two sets of objects: $ S $ with size $ n_S $ and $ I $ with size $ n_I $, where $ n_S, n_I > 0 $.
+    \item There is a set $ G $ of locations, with size $ n_G $.
+    \item Each object from both $ S $ and $ I $ is independently placed at location $ G_i $ with probability $ w_i $.
+    \item If at least one object from $ S $ and at least one object from $ I $ are placed at the same location $ G_i $, an event $ E $ occurs at $ G_i $ with probability $ \epsilon_i $.
+\end{itemize}
+
+We derive:
+\begin{enumerate}
+    \item The probability that $ E $ occurs at a specific location $ i $.
+    \item The probability that $ E $ occurs at least once at any location in $ G $.
+\end{enumerate}
+
+We consider three cases:
+\begin{enumerate}
+    \item General case: Any $ n_I $ and any $ n_S $.
+    \item Special case: $ n_I = 1 $, any $ n_S $.
+    \item Special case: $ n_I = 1 $, $ n_S = 1 $.
+\end{enumerate}
+
+\section{General Case: Any $ n_I $ and $ n_S $}
+
+\subsection{Probability of $ E $ at Location $ i $}
+
+Define $ S_i $ and $ I_i $ as the number of objects from $ S $ and $ I $ that land at location $ G_i $. Since each object chooses $ G_i $ with probability $ w_i $, we have:
+
+\begin{equation}
+S_i \sim \text{Binomial}(n_S, w_i), \quad I_i \sim \text{Binomial}(n_I, w_i).
+\end{equation}
+
+The probability that at least one object from $ S $ and at least one object from $ I $ land at $ G_i $ is:
+
+\begin{equation}
+P(S_i \geq 1, I_i \geq 1) = 1 - P(S_i = 0) - P(I_i = 0) + P(S_i = 0, I_i = 0).
+\end{equation}
+
+Since the binomial probability mass function gives:
+
+\begin{equation}
+P(S_i = 0) = (1 - w_i)^{n_S}, \quad P(I_i = 0) = (1 - w_i)^{n_I},
+\end{equation}
+
+and since placements are independent,
+
+\begin{equation}
+P(S_i = 0, I_i = 0) = P(S_i = 0) P(I_i = 0) = (1 - w_i)^{n_S + n_I}.
+\end{equation}
+
+Thus,
+
+\begin{equation}
+P(S_i \geq 1, I_i \geq 1) = 1 - (1 - w_i)^{n_S} - (1 - w_i)^{n_I} + (1 - w_i)^{n_S + n_I}.
+\end{equation}
+
+Given this overlap, $ E $ occurs with probability $ \epsilon_i $, so:
+
+\begin{equation}
+P(E_i) = \epsilon_i \left[ 1 - (1 - w_i)^{n_S} - (1 - w_i)^{n_I} + (1 - w_i)^{n_S + n_I} \right].
+\end{equation}
+
+\subsection{Probability of $ E $ at Any Location}
+
+Since locations are independent, the probability that $ E $ does not occur at any location is:
+
+\begin{equation}
+\prod_{i=1}^{n_G} \left( 1 - P(E_i) \right).
+\end{equation}
+
+Thus, the probability that $ E $ occurs at least once is:
+
+\begin{equation}
+P(E_{\text{any}}) = 1 - \prod_{i=1}^{n_G} \left( 1 - P(E_i) \right).
+\end{equation}
+
+\section{Special Case: $ n_I = 1 $, Any $ n_S $}
+
+\subsection{Probability of $ E $ at Location $ i $}
+
+Setting $ n_I = 1 $ in the general formula:
+
+\begin{equation}
+P(E_i) = \epsilon_i \left[ 1 - (1 - w_i)^{n_S} - (1 - w_i) + (1 - w_i)^{n_S + 1} \right].
+\end{equation}
+
+Rearranging terms:
+
+\begin{equation}
+P(E_i) = \epsilon_i \left[ w_i - (1 - w_i)^{n_S} + (1 - w_i)^{n_S + 1} \right].
+\end{equation}
+
+Factoring:
+
+\begin{equation}
+P(E_i) = \epsilon_i w_i \left[ 1 - (1 - w_i)^{n_S} \right].
+\end{equation}
+
+\subsection{Probability of $ E $ at Any Location}
+
+\begin{equation}
+P(E_{\text{any}}) = 1 - \prod_{i=1}^{n_G} \left( 1 - \epsilon_i w_i \left( 1 - (1 - w_i)^{n_S} \right) \right).
+\end{equation}
+
+\section{Special Case: $ n_I = 1 $, $ n_S = 1 $}
+
+\subsection{Probability of $ E $ at Location $ i $}
+
+If $ n_I = 1 $ and $ n_S = 1 $, we substitute into the previous formula:
+
+\begin{equation}
+P(E_i) = \epsilon_i w_i \left[ 1 - (1 - w_i) \right].
+\end{equation}
+
+Since $ 1 - (1 - w_i) = w_i $, we get:
+
+\begin{equation}
+P(E_i) = \epsilon_i w_i^2.
+\end{equation}
+
+\subsection{Probability of $ E $ at Any Location}
+
+\begin{equation}
+P(E_{\text{any}}) = 1 - \prod_{i=1}^{n_G} \left( 1 - \epsilon_i w_i^2 \right).
+\end{equation}
+
+
+\end{document}
