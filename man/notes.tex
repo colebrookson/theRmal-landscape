@@ -206,4 +206,14 @@ P(E_i) = \epsilon_i w_i^2.
 P(E_{\text{any}}) = 1 - \prod_{i=1}^{n_G} \left( 1 - \epsilon_i w_i^2 \right).
 \]
 
+
+
+
+\begin{itemize}
+    \item code up a set of 100 patches with $w_ij= 1/100$ and just see what we get 
+    \item random placement of individuals and see how frequently you get co-location, and then see which of the equations are right -- many many simulations
+    \item then you can do it with some heterogeneous options 
+    \item they should converge -- just need to do it many many times over 
+    \item choose a random value out of the list given the weights and that's where your S lands, and then do it again for as many S's as you have, then do it again for the I -- see is what you chose randomly for your I individual is the same as where the S's are -- if it does then that's a "yes" and we can do this 1 million times 
+\end{itemize}
 \end{document}
