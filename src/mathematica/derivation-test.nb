@@ -1,0 +1,485 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Wolfram 14.2' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       154,          7]
+NotebookDataLength[     18823,        477]
+NotebookOptionsPosition[     17551,        446]
+NotebookOutlinePosition[     17976,        463]
+CellTagsIndexPosition[     17933,        460]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "Monte", " ", "Carlo", " ", "simulation", " ", "to", " ", "test", " ", 
+    "derivations"}], " ", "*)"}], "\n", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"numSimulations", " ", "=", " ", "1000000"}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"sameLocationCountOneS", " ", "=", " ", "0"}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"sameLocationCountTwoS", " ", "=", " ", "0"}], ";"}], "\n", "\n", 
+   
+   RowBox[{
+    RowBox[{"WgridHomogenous", " ", "=", " ", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{"1", "/", "100"}], ",", " ", 
+       RowBox[{"{", "100", "}"}]}], "]"}]}], ";"}], "\n", "\n", 
+   RowBox[{"Do", "[", "\n", "  ", 
+    RowBox[{"(*", " ", 
+     RowBox[{
+     "Randomly", " ", "choose", " ", "cells", " ", "for", " ", "S", " ", 
+      "and", " ", "I"}], " ", "*)"}], "\n", "  ", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"sLocation", " ", "=", " ", 
+       RowBox[{"RandomChoice", "[", 
+        RowBox[{"WgridHomogenous", " ", "->", " ", 
+         RowBox[{"Range", "[", "100", "]"}]}], "]"}]}], ";", "\n", "  ", 
+      RowBox[{"iLocation", " ", "=", " ", 
+       RowBox[{"RandomChoice", "[", 
+        RowBox[{"WgridHomogenous", " ", "->", " ", 
+         RowBox[{"Range", "[", "100", "]"}]}], "]"}]}], ";", "\n", "  ", "\n",
+       "  ", 
+      RowBox[{"(*", " ", 
+       RowBox[{"Check", " ", "if", " ", "they", " ", "match"}], " ", "*)"}], 
+      "\n", "  ", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"sLocation", " ", "==", " ", "iLocation"}], ",", " ", 
+        RowBox[{"sameLocationCountOneS", "++"}]}], "]"}], ";", "\n", "\n", 
+      "  ", 
+      RowBox[{"(*", " ", 
+       RowBox[{"For", " ", "two", " ", "S", " ", "individuals"}], " ", "*)"}],
+       "\n", "  ", 
+      RowBox[{"sLocations", " ", "=", " ", 
+       RowBox[{"RandomChoice", "[", 
+        RowBox[{
+         RowBox[{"WgridHomogenous", " ", "->", " ", 
+          RowBox[{"Range", "[", "100", "]"}]}], ",", " ", "2"}], "]"}]}], ";",
+       "\n", "  ", 
+      RowBox[{"iLocation2", " ", "=", " ", 
+       RowBox[{"RandomChoice", "[", 
+        RowBox[{"WgridHomogenous", " ", "->", " ", 
+         RowBox[{"Range", "[", "100", "]"}]}], "]"}]}], ";", "\n", "  ", "\n",
+       "  ", 
+      RowBox[{"(*", " ", 
+       RowBox[{
+       "Check", " ", "if", " ", "the", " ", "infected", " ", "cell", " ", 
+        "matches", " ", "one", " ", "of", " ", "the", " ", "susceptible", " ",
+         "cells"}], " ", "*)"}], "\n", "  ", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"MemberQ", "[", 
+         RowBox[{"sLocations", ",", " ", "iLocation2"}], "]"}], ",", " ", 
+        RowBox[{"sameLocationCountTwoS", "++"}]}], "]"}], ";"}], "\n", "\n", ",",
+      " ", 
+     RowBox[{"{", "numSimulations", "}"}]}], "]"}], "\n", "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{"Calculate", " ", "proportions"}], " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"proportionSameLocationOneS", " ", "=", " ", 
+     RowBox[{"sameLocationCountOneS", " ", "/", " ", "numSimulations"}]}], 
+    ";"}], "\n", 
+   RowBox[{
+    RowBox[{"proportionSameLocationTwoS", " ", "=", " ", 
+     RowBox[{"sameLocationCountTwoS", " ", "/", " ", "numSimulations"}]}], 
+    ";"}], "\n", "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+    "Calculate", " ", "predicted", " ", "values", " ", "based", " ", "on", " ",
+      "derivations"}], " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"nS", " ", "=", " ", "1"}], ";", " ", 
+    RowBox[{"nI", " ", "=", " ", "1"}], ";", " ", 
+    RowBox[{"nG", " ", "=", " ", "100"}], ";"}], "\n", "\n", 
+   RowBox[{
+    RowBox[{"epsilon", " ", "=", " ", "1"}], ";"}], " ", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+    "Assume", " ", "constant", " ", "epsilon", " ", "for", " ", 
+     "simplicity"}], " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"predictedProbE", " ", "=", " ", 
+     RowBox[{"Table", "[", "\n", "  ", 
+      RowBox[{
+       RowBox[{"epsilon", " ", "*", " ", 
+        RowBox[{"Wgrid", "[", 
+         RowBox[{"[", "i", "]"}], "]"}], " ", "*", " ", 
+        RowBox[{"(", 
+         RowBox[{"1", " ", "-", " ", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"1", " ", "-", " ", 
+             RowBox[{"Wgrid", "[", 
+              RowBox[{"[", "i", "]"}], "]"}]}], ")"}], "^", "nS"}]}], ")"}]}],
+        ",", "\n", "  ", 
+       RowBox[{"{", 
+        RowBox[{"i", ",", " ", "nG"}], "}"}]}], "\n", "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"predictedProbAnyE", " ", "=", " ", 
+     RowBox[{"1", " ", "-", " ", 
+      RowBox[{"Times", " ", "@@", " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"1", " ", "-", " ", "#"}], " ", "&"}], " ", "/@", " ", 
+         "predictedProbE"}], ")"}]}]}]}], ";"}], "\n", "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{"Print", " ", "results"}], " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{"\"\<Proportion of same location for 1 S and 1 I (simulated): \>\
+\"", ",", " ", 
+      RowBox[{"N", "[", "proportionSameLocationOneS", "]"}]}], "]"}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{"\"\<Proportion of same location for 2 S and 1 I (simulated): \>\
+\"", ",", " ", 
+      RowBox[{"N", "[", "proportionSameLocationTwoS", "]"}]}], "]"}], ";"}], 
+   "\n", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{"Print", "[", 
+      RowBox[{"\"\<Predicted probability for E at each location: \>\"", ",", 
+       " ", "predictedProbE"}], "]"}], ";"}], "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{"\"\<Predicted probability for E occurring at any location: \>\"",
+       ",", " ", "predictedProbAnyE"}], "]"}], ";"}]}]}]], "Code",
+ CellChangeTimes->{{3.948463507376329*^9, 3.948463525834113*^9}, {
+   3.9484635611282063`*^9, 3.948463562729155*^9}, {3.9484637198616858`*^9, 
+   3.948463746982789*^9}, {3.948463909538868*^9, 3.94846393045681*^9}, 
+   3.948464458996792*^9, {3.948464824163484*^9, 3.94846486577418*^9}, {
+   3.948464945292485*^9, 3.948464955613414*^9}, {3.948465050488122*^9, 
+   3.948465051273897*^9}, 3.948465666296343*^9, {3.948465707528123*^9, 
+   3.9484657244914*^9}, 3.948465772784478*^9},
+ CellLabel->
+  "In[258]:=",ExpressionUUID->"b530793f-e9b7-44a1-a5bb-dda64fba974f"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"Proportion of same location for 1 S and 1 I (simulated): \"\>",
+    "\[InvisibleSpace]", "0.009953`"}],
+  SequenceForm[
+  "Proportion of same location for 1 S and 1 I (simulated): ", 0.009953],
+  Editable->False]], "Print",
+ CellChangeTimes->{{3.9484635789832163`*^9, 3.948463579335516*^9}, {
+   3.948463730262547*^9, 3.948463749597166*^9}, 3.948463914558242*^9, 
+   3.948463952705121*^9, 3.9484649247103853`*^9, 3.9484650154781837`*^9, {
+   3.9484656617459393`*^9, 3.948465687526373*^9}, {3.948465718858079*^9, 
+   3.948465727208727*^9}, 3.9484657930584917`*^9},
+ CellLabel->
+  "During evaluation of \
+In[258]:=",ExpressionUUID->"7c738f23-8ca0-4858-8b5c-15533057fc28"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"Proportion of same location for 2 S and 1 I (simulated): \"\>",
+    "\[InvisibleSpace]", "0.019686`"}],
+  SequenceForm[
+  "Proportion of same location for 2 S and 1 I (simulated): ", 0.019686],
+  Editable->False]], "Print",
+ CellChangeTimes->{{3.9484635789832163`*^9, 3.948463579335516*^9}, {
+   3.948463730262547*^9, 3.948463749597166*^9}, 3.948463914558242*^9, 
+   3.948463952705121*^9, 3.9484649247103853`*^9, 3.9484650154781837`*^9, {
+   3.9484656617459393`*^9, 3.948465687526373*^9}, {3.948465718858079*^9, 
+   3.948465727208727*^9}, 3.948465793059257*^9},
+ CellLabel->
+  "During evaluation of \
+In[258]:=",ExpressionUUID->"2b5e07e2-446c-4106-86a6-491843c8febe"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"Predicted probability for E occurring at any location: \"\>", "\[InvisibleSpace]",
+    "0.012593137988790581`"}],
+  SequenceForm[
+  "Predicted probability for E occurring at any location: ", 
+   0.012593137988790581`],
+  Editable->False]], "Print",
+ CellChangeTimes->{{3.9484635789832163`*^9, 3.948463579335516*^9}, {
+   3.948463730262547*^9, 3.948463749597166*^9}, 3.948463914558242*^9, 
+   3.948463952705121*^9, 3.9484649247103853`*^9, 3.9484650154781837`*^9, {
+   3.9484656617459393`*^9, 3.948465687526373*^9}, {3.948465718858079*^9, 
+   3.948465727208727*^9}, 3.948465793059901*^9},
+ CellLabel->
+  "During evaluation of \
+In[258]:=",ExpressionUUID->"9e0a44ff-653d-43e4-bf4b-4072dd75fbd2"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[BoxData["\[AliasDelimiter]"], "Input",
+ CellChangeTimes->{
+  3.9484665042829638`*^9},ExpressionUUID->"5d1d5587-af4f-48dd-8c6d-\
+d2b9205c5a05"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "Monte", " ", "Carlo", " ", "simulation", " ", "to", " ", "test", " ", 
+    "derivations"}], " ", "*)"}], "\n", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"numSimulations", " ", "=", " ", "10000"}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"sameLocationCountOneS", " ", "=", " ", "0"}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"sameLocationCountTwoS", " ", "=", " ", "0"}], ";"}], "\n", "\n", 
+   
+   RowBox[{"(*", " ", 
+    RowBox[{
+    "Generate", " ", "weights", " ", "from", " ", "a", " ", "truncated", " ", 
+     "normal", " ", "distribution", " ", "and", " ", "normalize", " ", "to", " ",
+      "sum", " ", "to", " ", "1"}], " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"Wgrid", " ", "=", " ", 
+     RowBox[{"RandomVariate", "[", 
+      RowBox[{
+       RowBox[{"TruncatedDistribution", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"0", ",", " ", "\[Infinity]"}], "}"}], ",", " ", 
+         RowBox[{"NormalDistribution", "[", 
+          RowBox[{"1", ",", " ", "0.5"}], "]"}]}], "]"}], ",", " ", "100"}], 
+      "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"Wgrid", " ", "=", " ", 
+     RowBox[{"Wgrid", " ", "/", " ", 
+      RowBox[{"Total", "[", "Wgrid", "]"}]}]}], ";"}], "\n", "\n", 
+   RowBox[{"Do", "[", "\n", "  ", 
+    RowBox[{"(*", " ", 
+     RowBox[{
+     "Randomly", " ", "choose", " ", "cells", " ", "for", " ", "S", " ", 
+      "and", " ", "I"}], " ", "*)"}], "\n", "  ", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"sLocation", " ", "=", " ", 
+       RowBox[{"RandomChoice", "[", 
+        RowBox[{"Wgrid", " ", "->", " ", 
+         RowBox[{"Range", "[", "100", "]"}]}], "]"}]}], ";", "\n", "  ", 
+      RowBox[{"iLocation", " ", "=", " ", 
+       RowBox[{"RandomChoice", "[", 
+        RowBox[{"Wgrid", " ", "->", " ", 
+         RowBox[{"Range", "[", "100", "]"}]}], "]"}]}], ";", "\n", "  ", "\n",
+       "  ", 
+      RowBox[{"(*", " ", 
+       RowBox[{"Check", " ", "if", " ", "they", " ", "match"}], " ", "*)"}], 
+      "\n", "  ", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"sLocation", " ", "==", " ", "iLocation"}], ",", " ", 
+        RowBox[{"sameLocationCountOneS", "++"}]}], "]"}], ";", "\n", "\n", 
+      "  ", 
+      RowBox[{"(*", " ", 
+       RowBox[{"For", " ", "two", " ", "S", " ", "individuals"}], " ", "*)"}],
+       "\n", "  ", 
+      RowBox[{"sLocations", " ", "=", " ", 
+       RowBox[{"RandomChoice", "[", 
+        RowBox[{
+         RowBox[{"Wgrid", " ", "->", " ", 
+          RowBox[{"Range", "[", "100", "]"}]}], ",", " ", "2"}], "]"}]}], ";",
+       "\n", "  ", 
+      RowBox[{"iLocation2", " ", "=", " ", 
+       RowBox[{"RandomChoice", "[", 
+        RowBox[{"Wgrid", " ", "->", " ", 
+         RowBox[{"Range", "[", "100", "]"}]}], "]"}]}], ";", "\n", "  ", "\n",
+       "  ", 
+      RowBox[{"(*", " ", 
+       RowBox[{
+       "Check", " ", "if", " ", "the", " ", "infected", " ", "cell", " ", 
+        "matches", " ", "one", " ", "of", " ", "the", " ", "susceptible", " ",
+         "cells"}], " ", "*)"}], "\n", "  ", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"MemberQ", "[", 
+         RowBox[{"sLocations", ",", " ", "iLocation2"}], "]"}], ",", " ", 
+        RowBox[{"sameLocationCountTwoS", "++"}]}], "]"}], ";"}], "\n", "\n", ",",
+      " ", 
+     RowBox[{"{", "numSimulations", "}"}]}], "]"}], "\n", "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{"Calculate", " ", "proportions"}], " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"proportionSameLocationOneS", " ", "=", " ", 
+     RowBox[{"sameLocationCountOneS", " ", "/", " ", "numSimulations"}]}], 
+    ";"}], "\n", 
+   RowBox[{
+    RowBox[{"proportionSameLocationTwoS", " ", "=", " ", 
+     RowBox[{"sameLocationCountTwoS", " ", "/", " ", "numSimulations"}]}], 
+    ";"}], "\n", "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+    "Calculate", " ", "predicted", " ", "values", " ", "based", " ", "on", " ",
+      "derivations"}], " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"nS", " ", "=", " ", "1"}], ";", " ", 
+    RowBox[{"nI", " ", "=", " ", "1"}], ";", " ", 
+    RowBox[{"nG", " ", "=", " ", "100"}], ";"}], "\n", "\n", 
+   RowBox[{
+    RowBox[{"epsilon", " ", "=", " ", "1"}], ";"}], " ", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+    "Assume", " ", "constant", " ", "epsilon", " ", "for", " ", 
+     "simplicity"}], " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"predictedProbE", " ", "=", " ", 
+     RowBox[{"Table", "[", "\n", "  ", 
+      RowBox[{
+       RowBox[{"epsilon", " ", "*", " ", 
+        RowBox[{"Wgrid", "[", 
+         RowBox[{"[", "i", "]"}], "]"}], " ", "*", " ", 
+        RowBox[{"(", 
+         RowBox[{"1", " ", "-", " ", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"1", " ", "-", " ", 
+             RowBox[{"Wgrid", "[", 
+              RowBox[{"[", "i", "]"}], "]"}]}], ")"}], "^", "nS"}]}], ")"}]}],
+        ",", "\n", "  ", 
+       RowBox[{"{", 
+        RowBox[{"i", ",", " ", "nG"}], "}"}]}], "\n", "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"predictedProbAnyE", " ", "=", " ", 
+     RowBox[{"1", " ", "-", " ", 
+      RowBox[{"Times", " ", "@@", " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"1", " ", "-", " ", "#"}], " ", "&"}], " ", "/@", " ", 
+         "predictedProbE"}], ")"}]}]}]}], ";"}], "\n", "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{"Print", " ", "results"}], " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{"\"\<Proportion of same location for 1 S and 1 I (simulated): \>\
+\"", ",", " ", "proportionSameLocationOneS"}], "]"}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{"\"\<Proportion of same location for 2 S and 1 I (simulated): \>\
+\"", ",", " ", "proportionSameLocationTwoS"}], "]"}], ";"}], "\n", 
+   RowBox[{"(*", 
+    RowBox[{"Print", "[", 
+     RowBox[{"\"\<Predicted probability for E at each location: \>\"", ",", 
+      " ", "predictedProbE"}], "]"}], "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{"\"\<Predicted probability for E occurring at any location: \>\"",
+       ",", " ", "predictedProbAnyE"}], "]"}], ";"}]}]}]], "Code",
+ CellChangeTimes->{{3.948463955024002*^9, 3.9484639581310053`*^9}, {
+  3.9484643433609056`*^9, 3.948464343734651*^9}, {3.9484644514307823`*^9, 
+  3.948464476707556*^9}, {3.948464871962226*^9, 3.948464889258813*^9}, {
+  3.9484649748050327`*^9, 3.948464980233395*^9}, {3.948465060083282*^9, 
+  3.948465060661628*^9}, {3.948465542917941*^9, 3.948465565068668*^9}},
+ CellLabel->
+  "In[186]:=",ExpressionUUID->"ae7bb8c2-d7dd-4acf-a03a-cbbc5d9935c2"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"Proportion of same location for 1 S and 1 I (simulated): \"\>",
+    "\[InvisibleSpace]", 
+   FractionBox["61", "5000"]}],
+  SequenceForm["Proportion of same location for 1 S and 1 I (simulated): ", 
+   Rational[61, 5000]],
+  Editable->False]], "Print",
+ CellChangeTimes->{
+  3.948463971542029*^9, 3.948464345031641*^9, {3.948464470336768*^9, 
+   3.948464479629023*^9}, 3.948465066446086*^9, {3.948465551048272*^9, 
+   3.948465565852909*^9}},
+ CellLabel->
+  "During evaluation of \
+In[186]:=",ExpressionUUID->"730ef9fc-d43f-4166-9b77-3cc2d98a47bb"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"Proportion of same location for 2 S and 1 I (simulated): \"\>",
+    "\[InvisibleSpace]", 
+   FractionBox["253", "10000"]}],
+  SequenceForm["Proportion of same location for 2 S and 1 I (simulated): ", 
+   Rational[253, 10000]],
+  Editable->False]], "Print",
+ CellChangeTimes->{
+  3.948463971542029*^9, 3.948464345031641*^9, {3.948464470336768*^9, 
+   3.948464479629023*^9}, 3.948465066446086*^9, {3.948465551048272*^9, 
+   3.948465565853573*^9}},
+ CellLabel->
+  "During evaluation of \
+In[186]:=",ExpressionUUID->"9ed1d9e7-b421-4944-acf4-1cee9334e69d"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"Predicted probability for E occurring at any location: \"\>", "\[InvisibleSpace]",
+    "0.012593137988790581`"}],
+  SequenceForm[
+  "Predicted probability for E occurring at any location: ", 
+   0.012593137988790581`],
+  Editable->False]], "Print",
+ CellChangeTimes->{
+  3.948463971542029*^9, 3.948464345031641*^9, {3.948464470336768*^9, 
+   3.948464479629023*^9}, 3.948465066446086*^9, {3.948465551048272*^9, 
+   3.948465565854185*^9}},
+ CellLabel->
+  "During evaluation of \
+In[186]:=",ExpressionUUID->"fcd6fd99-cf96-422c-9681-21fb6d3c00a5"]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{808, 881},
+WindowMargins->{{Automatic, 0}, {Automatic, 0}},
+Magnification:>1.5 Inherited,
+FrontEndVersion->"14.2 for Mac OS X ARM (64-bit) (December 26, 2024)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"43b8e647-55fb-439b-9704-cfdb51eff462"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[576, 22, 6185, 150, 1264, "Code",ExpressionUUID->"b530793f-e9b7-44a1-a5bb-dda64fba974f"],
+Cell[CellGroupData[{
+Cell[6786, 176, 718, 14, 62, "Print",ExpressionUUID->"7c738f23-8ca0-4858-8b5c-15533057fc28"],
+Cell[7507, 192, 716, 14, 62, "Print",ExpressionUUID->"2b5e07e2-446c-4106-86a6-491843c8febe"],
+Cell[8226, 208, 741, 15, 62, "Print",ExpressionUUID->"9e0a44ff-653d-43e4-bf4b-4072dd75fbd2"]
+}, Open  ]]
+}, Open  ]],
+Cell[8994, 227, 147, 3, 44, "Input",ExpressionUUID->"5d1d5587-af4f-48dd-8c6d-d2b9205c5a05"],
+Cell[CellGroupData[{
+Cell[9166, 234, 6538, 158, 1321, "Code",ExpressionUUID->"ae7bb8c2-d7dd-4acf-a03a-cbbc5d9935c2"],
+Cell[CellGroupData[{
+Cell[15729, 396, 596, 14, 50, "Print",ExpressionUUID->"730ef9fc-d43f-4166-9b77-3cc2d98a47bb"],
+Cell[16328, 412, 600, 14, 50, "Print",ExpressionUUID->"9ed1d9e7-b421-4944-acf4-1cee9334e69d"],
+Cell[16931, 428, 592, 14, 34, "Print",ExpressionUUID->"fcd6fd99-cf96-422c-9681-21fb6d3c00a5"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
