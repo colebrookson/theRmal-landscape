@@ -41,9 +41,9 @@ pivotal celetial plume
     \item A biological motivation of this is to consider some burrowing organisms which directly transmit a pathogen of interest between them, dependent on physical proximity
 \end{itemize}
 
-\section*{Methods}\label{s:methods}
+\section*{Methods \& Results}\label{s:methods-results}
 
-To abstract the landscape sufficiently, we imagine a landscape where a series of individuals make daily landscape-level selections on where they will forage, with no memory and perfect knowledge of the landscape. Therefore, they chose from the available cells, $w_i$ based on each cell's value as a probability. Since these are probabilities it must be true that 
+To abstract the transmission dynamics sufficiently, we imagine a landscape where a series of individuals make daily landscape-level selections on where they will forage, with no memory and perfect knowledge of the landscape. Therefore, they chose from the available cells, $w_i$ based on each cell's value as a probability. Since these are probabilities it must be true that 
 \begin{equation}
 \sum_i w_{i}=1.
 \end{equation}
@@ -83,6 +83,40 @@ Expanding this:
 P(\text{collocation in cell } i) = \left[ 1 - (1 - w_{i})^S \right] \cdot \left[ 1 - (1 - w_{i})^I \right].
 \end{equation}
 
+\subsection{Landscape with a known distribution}
+
+In above formulations, the landscape values $w$ are a function of both $T$ and $R$, however, we can make a further simplifying assumption in some cases that the values, while implicitly still based on $T$ and $R$ are instead given by some known distribution. The landscape on which individuals are making occupancy decisions can be thought of as consisting of normalized values, where the number of patches $n$ is sufficiently large. We also focus on the case where there is only one $I$ individual and transmission is assured by co-occurring on the landscape.
+
+We begin considering that $w$ takes a uniform random distribution. We assume that the quality $q_i$ of each patch is drawn at random from a uniform distribution $(0,1)$, and then transform these qualities to get patch weights $w_i$ by dividing each patch by the total of the quality values where $i = 1,...,n$. 
+
+\begin{equation}
+    w_i = \frac{q_i}{\sum_i{q_i}}
+\end{equation}
+
+Here, $w_i$ are therefore nearly uniformly distributed 
+\begin{equation}
+    (0, \frac{2}{n})
+\end{equation} 
+for large enough $n$. Here we are considering the case where co-location by two $S$ individuals is given by 
+\begin{equation}
+    n*w(1-(1-w)^S).
+\end{equation} 
+
+If we assume that $n>2$ and also that $S \geq 1$, then the expectation of our co-location is: 
+
+\begin{equation}
+    E[n*w(1-(1-w)^S)] = \frac{n^{-S} \left(\left(2 (S+1) (S+2)-n^2\right) n^S+(n-2)^{S+1} (n+2
+   S+2)\right)}{2 (S+1) (S+2)}. 
+\end{equation}
+
+We could also assume that the weights are exponentially distributed, since $n$ random draws from an exponential with a mean $\frac{1}{\lambda} = 1$ would sum to a mean of 1, given large enough $n$. That would take the form 
+
+\begin{equation}
+    E[n*w(1-(1-w)^S)] = \frac{1-n^2+S-\mathcal{e}^{-n}(-n)^{-S}(1+n+S)((-1+(-1)^{2S}\Gamma(2+S)+\Gamma(2+S, -n)}{1+S}
+\end{equation}
+
+
+
 \subsubsection{Probability of Successful Transmission}
 
 To determine whether or not transmission can occur, we consider the case where infected and susceptible individuals are present on the same landscape patch, and also the likelihood of a transmission event occurring successfully. We denote this as $\epsilon(T)$ which is the temperature dependent probability of transmission.  Given some collocation, if there is some patch with $S = 1, I = 1$, the likelihood of transmission is just $\varepsilon_{i}(T)$. In the case of $S = 2$, we have the probability of 
@@ -112,17 +146,7 @@ And therefore the probability of it spreading on the landscape at all is:
     \boldsymbol{\phi}(k, I = 1) = \sum_i 1 - (1 - w(T) \varepsilon(T))^S
 \end{equation}
 
-\subsection{Landscape with a known distribution}
 
-The landscape on which individuals are making occupancy decisions can be thought of as consisting of normalized values, where the number of patches $n$ is sufficiently large. 
-
-We begin considering $w$ that takes a uniform random distribution. We assume that the quality $q_i$ of each patch is drawn at random from a uniform distribution $(0,1)$, and then transform these qualities to get patch weights $w_i$ by dividing each patch by the total of the quality values where $i = 1,...,n$. 
-
-\begin{equation}
-    w_i = \frac{q_i}{\sum_i{q_i}}
-\end{equation}
-
-Here, $w_i$ are therefore nearly uniformly distributed on the interval $(0, \frac{2}{n})$ for large enough $n$. If we assume that $p>2$
 
 
 
@@ -138,10 +162,10 @@ where $f(T_{i}, R_{i})$ is the function defining the suitability of patch $i$ ba
 
 with $m(T)$ being a respiration term of the organism, and $I_{\text{max}(T)}$ is the maximum uptake rate, where $m(T) = m_a e^{m_b \times T} + m_c$ and $I_{\text{max}}(T) = e^{-(T - T_I)^2 / \gamma}$ with $m$ being an approximated exponential version of the Boltzmann-Arrhenius relationship. Here $T_I$ is the optimal temperature value and $\gamma$ determines the breadth of the response. This value is dependent on each cell, where $T_{i}$ is the temperature value at $i$ and $R_{i}$ is the inflow supply of some resource for the organism choosing it's location \Cref{fig:t-s-wij-grid}. The values for a given cell of $T$ and $S$ are drawn from:
 
-\section*{Results}\label{s:results}
+%\section*{Results}\label{s:results}
 
 
-\section*{Discussion}\label{s:discussion}
+%\section*{Discussion}\label{s:discussion}
 
 
 \section*{Bibliography}
