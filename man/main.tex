@@ -109,12 +109,16 @@ If we assume that $n>2$ and also that $S \geq 1$, then the expectation of our co
    S+2)\right)}{2 (S+1) (S+2)}. 
 \end{equation}
 
-If we 
+If we compare this set of expected values, varying the ratio of $S/n$, then we can see our expected values match the draws from a simulated distribution 
+
+\begin{figure}
+    \includegraphics[width=0.75\linewidth]{"./figs/si/constant-uniform.pdf"}
+\end{figure}
 
 We could also assume that the weights are exponentially distributed, since $n$ random draws from an exponential with a mean $\frac{1}{\lambda} = 1$ would sum to a mean of 1, given large enough $n$. That would take the form 
 
 \begin{equation}
-    E[n*w(1-(1-w)^S)] = \frac{1-n^2+S-\mathcal{e}^{-n}(-n)^{-S}(1+n+S)((-1+(-1)^{2S}\Gamma(2+S)+\Gamma(2+S, -n)}{1+S}
+    E[n*w(1-(1-w)^S)] = \frac{1-n^2+S-\mathcal{e}^{-n}(-n)^{-S}(1+n+S)((-1+(-1)^{2S}) \Gamma(2+S)+\Gamma(2+S, -n))}{1+S}
 \end{equation}
 
 
