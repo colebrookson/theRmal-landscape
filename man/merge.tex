@@ -5,6 +5,12 @@
 \renewcommand\familydefault{\sfdefault}
 \usepackage{lipsum}
 
+% to get the references the way I want
+\usepackage{hyperref}
+\usepackage{cleveref}
+\crefformat{figure}{(Figure~#2#1#3)}
+\Crefformat{figure}{Figure~#2#1#3}
+
 %% setup specific to this preprint -- add or remove as you need.
 \hyphenation{empire} % prevents word "empire" being split across lines
 \sisetup{range-units = single,
