@@ -84,6 +84,10 @@ Expanding this:
 \begin{equation}
 P(\text{collocation in cell } i) = \left[ 1 - (1 - w_{i})^S \right] \cdot \left[ 1 - (1 - w_{i})^I \right].
 \end{equation}
+which, if we assume instead of $I\geq1$ that $I=1$ then this becomes
+\begin{equation}
+P(\text{collocation in cell } i) = \left[ 1 - (1 - w_{i})^S \right] \cdot w_i.
+\end{equation}
 
 \subsection{Landscape with a known distribution}
 
@@ -97,7 +101,7 @@ First, we assume that the weights on the landscape are all equal, and there are 
     E[CO] = (S+I)(1-(1-\frac{1}{n})^S
 \end{equation}
 
-We simulate this process using a simple random choice based on constant uniform values of $w$, and show that the expected values track the simulated values very well \cref{fig:constant}, which is to be expected.
+We simulate this process using a simple random choice based on constant values of $w$, and show that the expected values track the simulated values very well \cref{fig:constant}, which is to be expected.
 
 \begin{figure}[!hpt]
     \centering
@@ -234,7 +238,8 @@ and an overall $\phi(k=1, I=1)$, where with $n = 100$, $\mu_T = 20$, $\mu_R = 0.
 
 As it currently stands, we can start to try and understand on a realistic landscape how factors such as temperature and supply may affect co-occurence probabilities, but from a more theoretical standpoint, we are limited in what we can say. Currently, we have come up with expressions (e.g. \cref{eq:exp-expectation,eq:uniform-expectation}) that allow us to determine whether or not, given some known number of locations $n$ and the number of susceptible individuals $S$, how likely a co-occurrence (and therefore transmission event) is to happen. However, so far: 
 \begin{itemize}
-    \item We cannot say anything concrete about what happens when $I=2$
+    \item We cannot say anything concrete about what happens when $I=2$.   We know that the probability of co-occurrence will increase compared to the case of $I=1$ (for reasonably large $S$), but there is still some chance that it will fail at each step.  
+    \item This will also depend on the period of infectiousness (e.g how many re-assortments of the landscape occur before death or recovery of $I$).
     \item The expressions we have are decently complex and don't offer much by way of elegant explanation 
 \end{itemize}
 
@@ -248,4 +253,4 @@ Ultimately, we'd like to find a way to come up with an closed-form probability s
 
 \section*{Bibliography}
 \bibliographystyle{bxv_abbrvnat}
-\bibliography{theRmal-landscape.bib}
+\bibliography{theRmal-landscape}
