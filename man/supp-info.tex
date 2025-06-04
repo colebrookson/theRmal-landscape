@@ -21,10 +21,43 @@
 \newpage
 \section*{Supplementary Information}
 
-\begin{figure*}[!ht]
-\centering
-%\includegraphics[width=0.75\linewidth]{Figures/temp.png}
-\caption{\textbf{This is an endosome.}\\
-(\textbf{A}) This is a supplementary figure shown as a two-column image with a legend underneath.}
-\label{suppfig:endosome}
-\end{figure*}
+\subsection*{Appendix 1 - Patch Weight Distributional Assumptions}\label{sec:app-1}
+
+\subsubsection*{Theoretical Justification}
+
+We make a simplifying assumption regarding path weights where we assume that patch occupancy probabilities are uniformly distributed on the interval $(0,2/n)$, and that for large enough $n$ their sum converges to 1 (satisfying their use as weights). To show briefly that this assumption is valid, we walk through what this means. 
+
+Suppose patch weights are independently drawn from a uniform distribution:
+\begin{equation}
+w_i \sim \text{Uniform}\left(0, \frac{2}{n}\right), \quad i = 1, \dots, n.
+\end{equation}
+
+Then for each weight it follows that the expected value and the variance would be:
+\begin{align}
+     \mathbb{E}[w_i] &=  \frac{1}{n}\\
+     \text{Var}(w_i) &= \frac{1}{12} \left(\frac{2}{n} - 0\right)^2 \\
+     &=  \frac{1}{3n^2}
+\end{align}
+
+
+The sum of the weights is:
+\begin{equation}
+S_n = \sum_{i=1}^{n} w_i,
+\end{equation}
+with expected value:
+\begin{equation}
+\mathbb{E}[S_n] = \sum_{i=1}^{n} \mathbb{E}[w_i] = n \cdot \frac{1}{n} = 1,
+\end{equation}
+and variance:
+\begin{equation}
+\text{Var}(S_n) = \sum_{i=1}^{n} \text{Var}(w_i) = n \cdot \frac{1}{3n^2} = \frac{1}{3n}.
+\end{equation}
+
+Therefore, as \( n \to \infty \),
+\begin{equation}
+\mathbb{E}[S_n] \to 1 \quad \text{and} \quad \text{Var}(S_n) \to 0,
+\end{equation}
+which implies that the sum of unnormalized weights converges in probability to 1:
+\begin{equation}
+S_n \xrightarrow{P} 1.
+\end{equation}
