@@ -13,7 +13,7 @@
 % \affil[2]{B Institute, Chalk Road, Blackboardville, USA}
 \date{}
 
-\maketitle
+% \maketitle
 
 % \begin{abstract}
 % Abstract of the paper goes here.
@@ -24,9 +24,9 @@
 % keyword1 | keyword2 | keyword3
 % \end{keywords}
 
-\begin{corrauthor}
-% third.professor\at awesome.ac.uk
-\end{corrauthor}
+% \begin{corrauthor}
+% % name\at gmail.com
+% \end{corrauthor}
 
 \section*{Brief introduction}\label{s:introduction}
 
@@ -45,7 +45,7 @@ In this project, our goal is to formalize this notion about landscape heterogene
 
 \section*{Methods \& Results}\label{s:methods-results}
 
-To abstract the transmission dynamics sufficiently, we imagine a landscape where a series of individuals make daily landscape-level selections on where they will forage, with no memory and perfect knowledge of the landscape. Therefore, they chose from the available cells, $w_i$ based on each cell's value as a probability. Since these are probabilities it must be true that 
+To abstract the transmission dynamics sufficiently, we imagine a landscape where a series of individuals make daily landscape-level selections on where they will forage, with no memory and perfect knowledge of the landscape. Therefore, they chose, independently of other individuals, from the available cells, $w_i$ based on each cell's value as a probability. Since these are probabilities it must be true that 
 \begin{equation}
 \sum_i w_{i}=1.
 \end{equation}
@@ -245,11 +245,53 @@ As it currently stands, we can start to try and understand on a realistic landsc
 
 Ultimately, we'd like to find a way to come up with an closed-form probability statement that allows us to say something along the lines of ``We are 95\% certain that an epidemic will spread under these conditions.'' This would mean that we could say, given a particular landscape weight $w$ distribution, number of $S$, number of total organisms $N$ and number of locations $n$, we could come up with an expectation that, for example, at least 50\% or even 100\% of the organisms will become infected. This would of course be assuming no loss of infection nor death (i.e. there is no recovery term either to a recovered state ($R$), nor back to the $S$ state. Additionally, $N$ is assumed to stay the same through the course of the process.
 
+\section*{Calculating $R_0$ from our model}
+
+It turns out we can derive the connection between our model (where we've been) with the expected $R_0$ quite easily.  If we begin by assuming that there are $I=1$ infected individuals in the population and $S$ susceptible individuals then the expected number of new infections arising in the first step $I_{new}$ (assuming that the infected individual lives for only one time step) is weighted averages of the co-occupancy probabilities: 
+
+\begin{align}
+R_0=E[I_{new}]&=\sum_{i=1}^{n}[ 0\cdot P(I=1 \text{ in }i) \cdot P(S=0 \text{ in }i) \\
+&+1\cdot P(I=1 \text{ in } i) \cdot P(S=1 \text{ in }i) \\
+&+2\cdot P(I=1 \text{ in } i) \cdot P(S=2 \text{ in }i) \\
+&+ \dots\\
+&+S\cdot P(I=1 \text{ in } i) \cdot P(S=S \text{ in }i)] \\
+&\\
+&=\sum_{i=1}^{n}\sum_{k=0}^S k \cdot w_i \cdot \binom{S}{k}w_i^k(1-w_i)^{S-k}
+\end{align}
+
+Here the variable $k$ sums across the $S+1$ different possible numbers of susceptible individuals in a patch.   We assume that co-occupancy leads to infection however adding an additional parameter could be added to reflect differences in infection probabilities among patches.   
+
+If we assume constant patch occupancy probabilities such that $w_i=w=1/n$ then
+\begin{align}
+R_0=E[I_{new}]&=n \cdot S \cdot w^2\\
+&=S/n
+\end{align}
+
+If we assume that patch occupancy probabilities are uniformly distributed on the interval $(0,2/n)$, for large enough $n$ their sum converges to 1 (satisfying their use as weights) and 
+\begin{align}
+R_0=\frac{4S}{3n}
+\end{align}
+
+We can even take this one step further to show that any variation among patches will increase $R_0$. If we assume that occupancy probabilities are uniformly distributed on the interval $w \approx  \mathcal{U}(1/n-q,1/n+q)$ then $q\rightarrow0$ corresponds to the case of a constant patch weight and increasing $q$ on the interval $0<q\leq 1/n$ represents an increase in the variance of the landscape.  The solution of $R_0$ is
+
+\begin{align}
+R_0=\frac{S}{n}+n S \frac{q^2}{3}
+\end{align}
+
+where $q^2/3$ is the variance of $\mathcal{U}$.  When $q=1/n$ (which is the limiting case because patch weights cannot be less than zero), we can see why the fraction $4/3$ emerges in the solution on line 36. 
+
+If we assume that patch occupancy probabilities are exponentially distributed with mean $1/n$,
+
+\begin{align}
+R_0=\frac{2S}{n}
+\end{align}
+
+We cannot do the same variance expansion with the exponential distribution that we did with the uniform.   
+
 %\section*{Results}\label{s:results}
 
 
 %\section*{Discussion}\label{s:discussion}
-
 
 \section*{Bibliography}
 \bibliographystyle{bxv_abbrvnat}
