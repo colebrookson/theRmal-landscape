@@ -17,6 +17,45 @@
 \author{Cole \& David}
 \maketitle
 
+\subsection{8 May 2025}
+\textbf{Next Steps}
+\begin{itemize}
+    \item To check that convergence actually works, we can do a check by: drawing patch weights (with 10,000 patches) and sum them all up, then check the average deviation from the expected value (which is 1), and we would want to see that the average deviation goes to zero as the patch weight goes up. 
+    \begin{itemize}
+        \item so the $(actual sum - 1)^2$ gives you the gross deviation, which will probably grow with n, but the average deviation per-patch should shrink with growing n 
+        \item can also take $|(actual sum - 1))|$, but they might converge at different rates
+        \item try a couple values of q 
+        \item plot this on a log(n) scale
+    \end{itemize}
+    \item to show the shape of how long until I=0, we can run across a geometric number of R0 values (i.e. 0.1 - 10) and this will show an S-shape
+    \begin{itemize}
+        \item we do want to do this so we can compare between the different things -- constant weights vs. variable weights. 
+        \item we want to plot these two things -- the calculated R0 values that we see
+        \item re-expressing the R0 we get from patch variability is a sufficient way to characterize an epidemic - if there's still a lot of variance there, then the R0 is not capturing all the variance there 
+        \item 
+    \end{itemize}
+\end{itemize}
+
+\textbf{Next Steps}
+\begin{itemize}
+    \item look at the different r0s and see how that changes the results
+    \item pick a basic r0 and expand around the basic uniform distribution -- does it look like just shifting the r0 by like changing the number of susceptibles 
+    \item if they look the same, then if you can understand r0 thats' the key 
+    \item if r0 goes up, once you have the bimodality, how many ones go to zero immediately, track that? 
+    \item if r0 goes up because you're changing the patch heterogeneity
+\end{itemize}
+
+\subsection{24 April 2025}
+
+\textbf{Next Steps}
+\begin{itemize}
+    \item look at the different r0s and see how that changes the results
+    \item pick a basic r0 and expand around the basic uniform distribution -- does it look like just shifting the r0 by like changing the number of susceptibles 
+    \item if they look the same, then if you can understand r0 thats' the key 
+    \item if r0 goes up, once you have the bimodality, how many ones go to zero immediately, track that? 
+    \item if r0 goes up because you're changing the patch heterogeneity
+\end{itemize}
+
 \subsection{27 February 2025}
 
 \textbf{Notes:}
