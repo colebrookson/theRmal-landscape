@@ -42,24 +42,33 @@ Then for each weight it follows that the expected value and the variance would b
 
 The sum of the weights is:
 \begin{equation}
-S_n = \sum_{i=1}^{n} w_i,
+\zeta_n = \sum_{i=1}^{n} w_i,
 \end{equation}
 with expected value:
 \begin{equation}
-\mathbb{E}[S_n] = \sum_{i=1}^{n} \mathbb{E}[w_i] = n \cdot \frac{1}{n} = 1,
+\mathbb{E}[\zeta_n] = \sum_{i=1}^{n} \mathbb{E}[w_i] = n \cdot \frac{1}{n} = 1,
 \end{equation}
 and variance:
 \begin{equation}
-\text{Var}(S_n) = \sum_{i=1}^{n} \text{Var}(w_i) = n \cdot \frac{1}{3n^2} = \frac{1}{3n}.
+\text{Var}(\zeta_n) = \sum_{i=1}^{n} \text{Var}(w_i) = n \cdot \frac{1}{3n^2} = \frac{1}{3n}.
 \end{equation}
 
 Therefore, as \( n \to \infty \),
 \begin{equation}
-\mathbb{E}[S_n] \to 1 \quad \text{and} \quad \text{Var}(S_n) \to 0,
+\mathbb{E}[\zeta_n] \to 1 \quad \text{and} \quad \text{Var}(\zeta_n) \to 0,
 \end{equation}
 which implies that the sum of unnormalized weights converges in probability to 1:
 \begin{equation}
-S_n \xrightarrow{P} 1.
+\zeta_n \xrightarrow{P} 1.
 \end{equation}
 
-We show that this holds for two cases, constant weights and Uniform random weights. 
+We show that this holds in a simulated environment for two cases, uniform random weights and uniform random weights with some variance $q$. To do this, we compare the cases where $w$ is given by constant weights, and where $w \approx  \mathcal{U}(1/n-q,1/n+q)$. Since the expected value of $\zeta_n$ is 1, we simulated across a variety of numbers of $n$, drawing weights $w$ in either of the two ways above 1000 times, and then calculated the average squared deviation and the average absolute deviation via 
+
+\begin{equation}
+    \begin{aligned}
+    \text{dev}_{\text{sq}} &= \left( \sum_{i=1}^n w_i - 1\right) ^ 2 \\ 
+    \text{dev}_{\text{abs}} &= \left| \sum_{i=1}^n w_i - 1\right|
+    \end{aligned}
+\end{equation}
+
+
