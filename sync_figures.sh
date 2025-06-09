@@ -1,14 +1,29 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-################################################################################
-#  step 0 – config
-################################################################################
-MAX_SIZE_MB=49                # files ≥ this size get ignored
+###############################################################################
+# config
+###############################################################################
+MAX_SIZE_MB=49
 PUB_SRC="./figs/pub"
 SI_SRC="./figs/si"
 PUB_DEST="./man/figs/main"
 SI_DEST="./man/figs/si"
+
+###############################################################################
+# step 0 – make sure source dirs exist (create + .gitkeep if absent)
+###############################################################################
+ensure_dir () {
+    local d=$1
+    if [[ ! -d "$d" ]]; then
+        echo "Creating missing dir $d and adding .gitkeep"
+        mkdir -p "$d"
+        touch "$d/.gitkeep"
+    fi
+}
+
+ensure_dir "$PUB_SRC"
+ensure_dir "$SI_SRC"
 
 ################################################################################
 #  step 1 – sync figures (your original logic)
