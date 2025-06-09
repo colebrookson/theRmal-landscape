@@ -87,13 +87,13 @@ We simulated across values of $n$ from 1,000 to 10,000,000. In both cases (with 
 \begin{figure}[!hpt]
     \centering
     \includegraphics[width=0.8\linewidth]{figs/si/patch-weight-convergence/absPlotAll.png}
-    \caption{Squared deviance as measured by \cref{eq:dev-measures}, versus the number of patches in the landscape. Each point represents the mean value from 1,000 random draws of $w$ for a given $n$ and $q$. This represents the case where $w$ is drawn from a uniform random distribution with no variance (i.e. $q=0$), maximum variance ($q=1/n$) and medium variance ($q=1/2n$}). 
+    \caption{Squared deviance as measured by \cref{eq:dev-measures}, versus the number of patches in the landscape. Each point represents the mean value from 1,000 random draws of $w$ for a given $n$ and $q$. This represents the case where $w$ is drawn from a uniform random distribution with no variance (i.e. $q=0$), maximum variance ($q=1/n$) and medium variance ($q=1/2n$)}. 
     \label{fig:patch-weight-sq}
 \end{figure}
 \newpage
 
 %--------------------------------------------------------------------
-\subsection*{Appendix 2 - Simulation strategies for landscape--level contagion}\label{app:app-2}
+\subsection*{Appendix 2 - Simulation strategies for landscape--level contagion (\texttt{\color{blue}r0-simulations.nb})}\label{app:app-2}
 %--------------------------------------------------------------------
 
 We consider two distinct inferential targets and, accordingly, adopt two computational strategies of very different complexity.  Table \ref{tab:sim_overview} summarises the mapping between \emph{question}, \emph{assumptions}, \emph{Mathematica implementation}, and \emph{computational cost}.
@@ -271,7 +271,7 @@ $
   \mathbb{E}[w_{I}]
     \;=\;
     \sum_{j=1}^{n} \mathbb{E}[w_{j}^{2}],
-    \tag{A.1}\label{eq:EwI}
+    \label{eq:EwI}
 \end{equation}
 because 
 \begin{equation}
