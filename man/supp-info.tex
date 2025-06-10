@@ -343,4 +343,28 @@ Insert \eqref{eq:wj2_moment} into
 \end{equation}
 which is exactly \eqref{eq:r0_app_goal}.  \hfill$\square$
 
+%======================================================================
+\subsection{Empirical checks against simulation output}%
+\label{app:figures}
+%======================================================================
 
+We successfully illustrated how the simulation strategies of \cref{app:app-2} reproduce the qualitative behavior anticipated from the analytic theory derived above.
+
+%----------------------------------------------------------------------
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.85\textwidth]{figs/si/r0-simulations/extinction-time-vs-r0.png}%
+  \caption{Mean extinction time (±\,SE) as a function of the basic reproduction number $R_{0}$ under \emph{uniform} patch weights. Each point aggregates 1000 realisations generated with a horizon of 1000. Consistent with branching-process intuition, the mean time to extinction increases sharply as soon as $R_{0}$ exceeds unity and then saturates for $R_{0}\gtrsim 2.5$. These results validate that the uniform-weight epidemic simulator correctly captures the expected critical transition around $R_{0}=1$.}
+  \label{fig:extinction_vs_r0}
+\end{figure}
+
+%----------------------------------------------------------------------
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.85\textwidth]{figs/si/r0-simulations/predicted-vs-simulated-r0-with-q.png}%
+  \caption{Comparison between the theoretical prediction \eqref{eq:r0_app_goal} (dashed blue line) and the simulated mean obtained across a geometric sequence of heterogeneity parameters $q$. Simulation settings: \texttt{n}~=~$2e^6$ patches and 10\,000 replicates per $q$. The excellent overlap confirms that \eqref{eq:r0_app_goal} captures the leading $q^{2}/3$ increase in $R_{0}$ predicted by the moment calculation of \ref{sec:r0_heterogeneity}.}
+  \label{fig:pred_vs_sim_r0}
+\end{figure}
+
+\medskip
+Taken together, \cref{fig:extinction_vs_r0,fig:pred_vs_sim_r0} demonstrate that the uniform weightw, multi-generation dynamics and heterogeneous weights, single-generation $R_{0}$ sweep faithfully reproduce the theoretical behavior expected under their respective modeling assumptions.
