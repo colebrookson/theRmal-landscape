@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       154,          7]
-NotebookDataLength[     33330,        909]
-NotebookOptionsPosition[     32544,        887]
-NotebookOutlinePosition[     32938,        903]
-CellTagsIndexPosition[     32895,        900]
+NotebookDataLength[     30991,        856]
+NotebookOptionsPosition[     30205,        834]
+NotebookOutlinePosition[     30599,        850]
+CellTagsIndexPosition[     30556,        847]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -600,7 +600,8 @@ Cell[BoxData[
                     RowBox[{
                     "--", "-"}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}\
 ]}]}]}]}]}]}]}]}]}]}], " ", "*)"}], "\n", "\n", 
-   RowBox[{"ClearAll", "[", "MakeEpsilonFunc", "]"}], ";", "\n", 
+   RowBox[{
+    RowBox[{"ClearAll", "[", "MakeEpsilonFunc", "]"}], ";"}], "\n", 
    RowBox[{"(*", 
     RowBox[{
      RowBox[{
@@ -608,88 +609,37 @@ Cell[BoxData[
        RowBox[{"**", "**", "**", "\n", "\"\<\>\""}], "\"\<MakeEpsilonFunc\>\"", 
        RowBox[{
         RowBox[{"\"\<\>\"", " ", "--"}], "--"}]}], "-", " ", "\n", 
+      RowBox[{"-", " ", "here"}]}], ",", " ", 
+     RowBox[{
       RowBox[{
-       RowBox[{"-", " ", "probability"}], " ", "of", " ", "a", " ", "disease",
-        " ", "spreading", " ", "on", " ", "the", " ", "landscape", " ", 
-       "from", " ", "cell", " ", "i"}]}], ",", " ", 
-     RowBox[{
-      RowBox[{"assuming", " ", "\n", "  ", "I"}], " ", "=", " ", "1"}], ",", 
-     " ", 
-     RowBox[{
-      RowBox[{"\[Phi]i", 
-       RowBox[{"(", 
-        RowBox[{"k", ",", " ", 
-         RowBox[{"I", " ", "=", " ", "1"}]}], ")"}], " ", "is", " ", "1"}], 
-      " ", "\[Minus]", " ", 
+      "the", " ", "epsilon", " ", "function", " ", "determines", " ", "the", " ",
+        "likelihood", " ", "of", " ", "transmission", " ", "given", "\n", 
+       "  ", "co"}], "-", 
       RowBox[{
-       RowBox[{"(", 
-        RowBox[{"1", " ", "\[Minus]", " ", 
-         RowBox[{"w", 
-          RowBox[{"(", "T", " ", ")"}], "\[CurlyEpsilon]", 
-          RowBox[{"(", "T", " ", ")"}]}]}], ")"}], "^", "S"}]}], ",", " ", 
+       RowBox[{"occurence", ".", " ", "It"}], " ", "can", " ", "be", " ", "a",
+        " ", "constant", " ", "value", " ", "or", " ", "take", " ", "some", " ",
+        "distribution"}]}], ",", " ", 
      RowBox[{
-      RowBox[{"so", " ", "as", " ", "long", " ", "as", " ", "I"}], " ", "=", 
-      " ", "1"}], ",", " ", 
-     RowBox[{
-     "we", " ", "set", "\n", "  ", "the", " ", "number", " ", "of", " ", 
-      "susceptibles"}], ",", " ", "S", ",", " ", 
-     RowBox[{
-      RowBox[{"then", " ", "calculate", " ", "the", " ", "temperature"}], "-", 
-      RowBox[{
-      "dependent", " ", "\n", "  ", "probability", " ", "of", " ", "spread", " ", 
-       RowBox[{"(", "eps", ")"}]}]}], ",", " ", 
-     RowBox[{"then", " ", "get", " ", "the", " ", "patch", " ", "weight"}], ",",
-      " ", 
-     RowBox[{"and", " ", "pultiply"}]}], " ", "\n", "*******)"}], "\n", 
+     "so", " ", "this", "\n", "  ", "function", " ", "denotes", " ", "which", 
+      " ", "of", " ", "these", " ", "options", " ", "is", " ", 
+      RowBox[{"operationalized", "."}]}]}], " ", "\n", "*******)"}], "\n", 
    RowBox[{
     RowBox[{
      RowBox[{"MakeEpsilonFunc", "[", "epsSpec_", "]"}], " ", ":=", "\n", "  ", 
-     RowBox[{"If", "[", 
+     RowBox[{"If", "[", "\n", "    ", 
+      RowBox[{"(*", " ", 
+       RowBox[{"constant", " ", "value", " ", "case"}], "*)"}], "\n", "    ", 
+      
       RowBox[{
        RowBox[{"NumericQ", "[", "epsSpec", "]"}], ",", "\n", "     ", 
        RowBox[{"Function", "[", 
         RowBox[{
-         RowBox[{"{", "T", "}"}], ",", " ", "epsSpec"}], "]"}], ",", "   ", 
+         RowBox[{"{", "T", "}"}], ",", " ", "epsSpec"}], "]"}], ",", " ", 
+       "\n", "     ", 
        RowBox[{"(*", " ", 
-        RowBox[{"constant", " ", "transmission", " ", "prob"}], " ", "*)"}], 
-       "\n", "     ", "epsSpec"}], "                   ", 
-      RowBox[{"(*", " ", 
-       RowBox[{"already", " ", "a", " ", "function"}], " ", "*)"}], "\n", 
-      "  ", "]"}]}], ";"}], "\n", "\n", 
-   RowBox[{"(*", " ", 
-    RowBox[{"TODO", ":", " ", 
-     RowBox[{
-     "choose", " ", "one", " ", "of", " ", "the", " ", "following", " ", 
-      "definitions"}]}], " ", "*)"}], "\n", 
-   RowBox[{
-    RowBox[{"epsFunc", " ", "=", " ", 
-     RowBox[{"MakeEpsilonFunc", "[", "1", "]"}]}], ";"}], 
-   "                                        ", 
-   RowBox[{"(*", " ", 
-    RowBox[{"constant", " ", "1"}], " ", "*)"}], "\n", 
-   RowBox[{"(*", " ", 
-    RowBox[{
-     RowBox[{"epsFunc", " ", "=", " ", 
-      RowBox[{"MakeEpsilonFunc", "[", "0.3", "]"}]}], ";"}], 
-    "                                   ", 
-    RowBox[{"(*", " ", 
-     RowBox[{"constant", " ", "0.3"}], " ", "*)"}], " ", "*)"}], "\n", 
-   RowBox[{"(*", " ", 
-    RowBox[{
-     RowBox[{"epsFunc", " ", "=", " ", 
-      RowBox[{"MakeEpsilonFunc", "[", 
-       RowBox[{"Function", "[", 
-        RowBox[{
-         RowBox[{"{", "T", "}"}], ",", " ", 
-         RowBox[{"1", "/", 
-          RowBox[{"(", 
-           RowBox[{"1", " ", "+", " ", 
-            RowBox[{"Exp", "[", 
-             RowBox[{
-              RowBox[{"-", "0.25"}], " ", 
-              RowBox[{"(", 
-               RowBox[{"T", " ", "-", " ", "22"}], ")"}]}], "]"}]}], 
-           ")"}]}]}], "]"}], "]"}]}], ";"}], " ", "*)"}], "\n", " ", "\n", 
+        RowBox[{"already", " ", "a", " ", "function"}], " ", "*)"}], "  ", 
+       "\n", "     ", "epsSpec"}], "                   ", "\n", "  ", "]"}]}],
+     ";"}], "\n", " ", "\n", 
    RowBox[{"(*", " ", 
     RowBox[{"--", 
      RowBox[{"--", 
@@ -813,7 +763,7 @@ Cell[BoxData[
        RowBox[{"(", "eps", ")"}]}]}], ",", " ", 
      RowBox[{"then", " ", "get", " ", "the", " ", "patch", " ", "weight"}], ",",
       " ", 
-     RowBox[{"and", " ", "pultiply"}]}], " ", "\n", "*******)"}], "\n", 
+     RowBox[{"and", " ", "multiply"}]}], " ", "\n", "*******)"}], "\n", 
    RowBox[{
     RowBox[{
      RowBox[{"PhiI", "[", 
@@ -837,23 +787,24 @@ Cell[BoxData[
             RowBox[{"(", 
              RowBox[{"1", " ", "-", " ", "w"}], ")"}], "*", 
             RowBox[{"(", "eps", ")"}]}], ")"}]}], ")"}], "^", "Stotal"}]}], 
-      "\n", "  ", "]"}]}], ";"}], "\n", "\n", 
-   RowBox[{"(*", " ", 
-    RowBox[{"phi", " ", "=", " ", 
-     RowBox[{
-     "\[CapitalSigma]", " ", "\[CapitalPhi]_i", " ", "over", " ", "all", " ", 
-      "patches"}]}], " ", "*)"}], "\n", 
+      "\n", "  ", "]"}]}], ";"}], "\n", "\n", "\n", 
    RowBox[{"(*", 
     RowBox[{
      RowBox[{
-      RowBox[{"**", "**", "**", "\n", "\"\<\>\""}], "\"\<PhiFromLandscape\>\"", 
       RowBox[{
-       RowBox[{"\"\<\>\"", " ", "--"}], "--"}]}], "-", " ", "\n", 
+       RowBox[{
+       "**", "**", "**", "\n", "\"\<\>\""}], "\"\<PhiFromLandscape\>\"", 
+       RowBox[{
+        RowBox[{"\"\<\>\"", " ", "--"}], "--"}]}], "-", " ", "\n", 
+      RowBox[{
+       RowBox[{"-", " ", "This"}], " ", "applies", " ", "the", " ", 
+       "PhiPatch", " ", "funtion", " ", "across", " ", "all", " ", "patches", 
+       " ", 
+       RowBox[{"we", "'"}], "re", " ", "using", " ", "here", "\n", "  ", 
+       "phi"}]}], " ", "=", " ", 
      RowBox[{
-      RowBox[{"-", " ", "This"}], " ", "applies", " ", "the", " ", "PhiPatch",
-       " ", "funtion", " ", "across", " ", "all", " ", "patches", " ", 
-      RowBox[{"we", "'"}], "re", " ", "using", " ", "here"}]}], "\n", 
-    "*******)"}], "\n", 
+     "\[CapitalSigma]", " ", "\[CapitalPhi]_i", " ", "over", " ", "all", " ", 
+      "patches"}]}], " ", "\n", "*******)"}], "\n", 
    RowBox[{
     RowBox[{
      RowBox[{"PhiFromLandscape", "[", 
@@ -868,20 +819,16 @@ Cell[BoxData[
         "&"}], " ", "/@", " ", 
        RowBox[{"Values", "[", "landscape", "]"}]}], "]"}]}], 
     ";"}]}]}]], "Code",
- CellChangeTimes->{{3.95950742224419*^9, 3.9595074489649487`*^9}, {
-  3.959507983744258*^9, 3.959508028310223*^9}, {3.9595125490831423`*^9, 
-  3.959512585969202*^9}, {3.959512848352207*^9, 3.9595128885498343`*^9}, {
-  3.95951343506291*^9, 3.9595134504074173`*^9}, {3.9595135538124437`*^9, 
-  3.959513577369294*^9}, {3.959513607657843*^9, 3.95951363320216*^9}, {
-  3.95951366779451*^9, 3.959513730170858*^9}, {3.959513780786682*^9, 
-  3.959513783708008*^9}, {3.959513846859232*^9, 3.959513879982222*^9}, {
-  3.959513999721614*^9, 3.959514117480803*^9}, {3.9595141572623262`*^9, 
-  3.9595142269836197`*^9}, {3.9595142650879583`*^9, 3.9595143086364117`*^9}, {
-  3.9595143795582542`*^9, 3.959514469695115*^9}, {3.959515575868739*^9, 
-  3.95951558285863*^9}, {3.9595157420358477`*^9, 3.959515796789145*^9}, {
-  3.959515839935278*^9, 3.959516073160411*^9}, {3.959516149963805*^9, 
-  3.959516160547914*^9}},ExpressionUUID->"0f204c9d-0868-4fc4-bc98-\
-80ae266234d2"]
+ CellChangeTimes->CompressedData["
+1:eJwdyjtIAgEAh/EjpwoHFwsLQcEgTmmJ7EE+IkEoISR6gBZczyESiR4HIRcR
+PQaRavAgSJusjBpCFwulKEGHC3pAFohD0nA0nUIP7P43fPyWT0N5nFNVBEGo
+xOAsd9/VzPDWt7zaDEtceQ2O8tubUHV8lCBFL2XmFLTbagvQFFQUoUtGkXrR
+QLXDAHcqHZ2w54HshnK5YIH1K029MDRH2+Hpsm0AMnp2CBKRkuSjLzcG3fMV
+Ci7Vlb3wijpn4PdkZANy9Lgf+jntHlx17wdh+7s3DClTLApj2Z82g+gHnTPC
+E12qD55ZWCfM8n/DUKnVLULfy7UPrm8pGChk0geQmFGGoLUhGYUjbOuF9E8Y
+4/BXXZS0f8UTsPHmMAmphdIt7Cc+72BmejcDC46aLHxlNBxMuwTJ/GDgCerD
+Lc/wH6jxzNk=
+  "],ExpressionUUID->"0f204c9d-0868-4fc4-bc98-80ae266234d2"]
 }, Open  ]]
 }, Open  ]]
 },
@@ -908,7 +855,7 @@ Cell[747, 27, 276, 6, 55, "Text",ExpressionUUID->"f725785b-a392-4e08-9396-3a7472
 Cell[CellGroupData[{
 Cell[1048, 37, 165, 3, 66, "Section",ExpressionUUID->"4f7a19e6-388d-4acb-9c8e-a248e161d63d"],
 Cell[1216, 42, 503, 9, 55, "Text",ExpressionUUID->"5f2387a8-d553-4262-b27d-17f92eab6c5d"],
-Cell[1722, 53, 30794, 830, 2181, "Code",ExpressionUUID->"0f204c9d-0868-4fc4-bc98-80ae266234d2"]
+Cell[1722, 53, 28455, 777, 2143, "Code",ExpressionUUID->"0f204c9d-0868-4fc4-bc98-80ae266234d2"]
 }, Open  ]]
 }, Open  ]]
 }
