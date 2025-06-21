@@ -1,0 +1,917 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Wolfram 14.2' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       154,          7]
+NotebookDataLength[     33330,        909]
+NotebookOptionsPosition[     32544,        887]
+NotebookOutlinePosition[     32938,        903]
+CellTagsIndexPosition[     32895,        900]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Components of variability", "Title",
+ CellChangeTimes->{{3.959507265077219*^9, 
+  3.959507268486135*^9}},ExpressionUUID->"36f1bb4e-9c88-4efb-8377-\
+b37277ff2bb8"],
+
+Cell["\<\
+This notebook explores how changing components of temperature vs supply can \
+change our landscape-level variation in \[Phi] \
+\>", "Text",
+ CellChangeTimes->{{3.9595072775304613`*^9, 
+  3.95950731507584*^9}},ExpressionUUID->"f725785b-a392-4e08-9396-\
+3a7472c248f0"],
+
+Cell[CellGroupData[{
+
+Cell["Parameters & Helpers", "Section",
+ CellChangeTimes->{{3.959507324301178*^9, 
+  3.959507335109516*^9}},ExpressionUUID->"4f7a19e6-388d-4acb-9c8e-\
+a248e161d63d"],
+
+Cell["\<\
+First, declare all the various helpers, including what we\[CloseCurlyQuote]re \
+going to call each of the different variables, and where things are stored. \
+Then we\[CloseCurlyQuote]ll write a main \[OpenCurlyDoubleQuote]simulation\
+\[CloseCurlyDoubleQuote] funtion as well as a series of helper functions\
+\>", "Text",
+ CellChangeTimes->{{3.95950734091683*^9, 3.959507353870669*^9}, {
+  3.959507393139538*^9, 
+  3.95950741833715*^9}},ExpressionUUID->"5f2387a8-d553-4262-b27d-\
+17f92eab6c5d"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{"--", 
+    RowBox[{"--", 
+     RowBox[{"--", 
+      RowBox[{"--", 
+       RowBox[{"--", 
+        RowBox[{"--", 
+         RowBox[{"--", 
+          RowBox[{"--", 
+           RowBox[{"--", 
+            RowBox[{"--", 
+             RowBox[{"--", 
+              RowBox[{"--", 
+               RowBox[{"--", 
+                RowBox[{"--", 
+                 RowBox[{"--", 
+                  RowBox[{"--", 
+                   RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{
+                    "--", "-"}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}\
+]}]}]}]}]}]}]}]}]}]}], " ", "*)"}], "\n", 
+  RowBox[{"(*", " ", 
+   RowBox[{"00", "  ", "Directory", " ", "helpers"}], " ", "*)"}], "\n", 
+  RowBox[{"(*", " ", 
+   RowBox[{"--", 
+    RowBox[{"--", 
+     RowBox[{"--", 
+      RowBox[{"--", 
+       RowBox[{"--", 
+        RowBox[{"--", 
+         RowBox[{"--", 
+          RowBox[{"--", 
+           RowBox[{"--", 
+            RowBox[{"--", 
+             RowBox[{"--", 
+              RowBox[{"--", 
+               RowBox[{"--", 
+                RowBox[{"--", 
+                 RowBox[{"--", 
+                  RowBox[{"--", 
+                   RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{
+                    "--", "-"}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}\
+]}]}]}]}]}]}]}]}]}]}], " ", "*)"}], "\n", 
+  RowBox[{
+   RowBox[{"Off", "[", 
+    RowBox[{"General", "::", "munfl"}], "]"}], " ", "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{"main", " ", "figure", " ", "directory", " ", 
+     RowBox[{"(", 
+      RowBox[{"relative", " ", "to", " ", "this", " ", "notebook"}], ")"}]}], 
+    " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"figDir", " ", "=", " ", 
+     RowBox[{"FileNameJoin", "[", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"NotebookDirectory", "[", "]"}], ",", " ", "\"\<..\>\"", ",", 
+        " ", "\"\<..\>\"", ",", " ", "\"\<figs\>\"", ",", " ", "\"\<si\>\"", ",",
+         " ", "\n", "                       ", "\"\<s-vs-t-variability\>\""}],
+        "}"}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"If", "[", 
+     RowBox[{
+      RowBox[{"!", " ", 
+       RowBox[{"DirectoryQ", "[", "figDir", "]"}]}], ",", " ", "\n", "  ", 
+      RowBox[{"CreateDirectory", "[", 
+       RowBox[{"figDir", ",", " ", 
+        RowBox[{"CreateIntermediateDirectories", " ", "->", " ", "True"}]}], 
+       "]"}]}], "]"}], ";"}], "\n", "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+    "data", " ", "directory", " ", "for", " ", "binary", " ", "objects"}], 
+    " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"dataDir", " ", "=", " ", 
+     RowBox[{"FileNameJoin", "[", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"NotebookDirectory", "[", "]"}], ",", " ", "\"\<..\>\"", ",", 
+        " ", "\"\<..\>\"", ",", " ", "\"\<outputs\>\"", ",", " ", "\n", 
+        "                        ", "\"\<intermediate-obs\>\"", ",", 
+        " ", "\"\<s-vs-t-variability\>\""}], "}"}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"If", "[", 
+     RowBox[{
+      RowBox[{"!", " ", 
+       RowBox[{"DirectoryQ", "[", "dataDir", "]"}]}], ",", " ", "\n", "  ", 
+      RowBox[{"CreateDirectory", "[", 
+       RowBox[{"dataDir", ",", " ", 
+        RowBox[{"CreateIntermediateDirectories", " ", "->", " ", "True"}]}], 
+       "]"}]}], "]"}], ";"}], "\n", "  ", "\n", "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{"--", 
+     RowBox[{"--", 
+      RowBox[{"--", 
+       RowBox[{"--", 
+        RowBox[{"--", 
+         RowBox[{"--", 
+          RowBox[{"--", 
+           RowBox[{"--", 
+            RowBox[{"--", 
+             RowBox[{"--", 
+              RowBox[{"--", 
+               RowBox[{"--", 
+                RowBox[{"--", 
+                 RowBox[{"--", 
+                  RowBox[{"--", 
+                   RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{
+                    "--", "-"}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}\
+]}]}]}]}]}]}]}]}]}]}], " ", "*)"}], "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{"01", "  ", 
+     RowBox[{"Env", ".", " ", "response"}], " ", "functions"}], " ", "*)"}], 
+   "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{"--", 
+     RowBox[{"--", 
+      RowBox[{"--", 
+       RowBox[{"--", 
+        RowBox[{"--", 
+         RowBox[{"--", 
+          RowBox[{"--", 
+           RowBox[{"--", 
+            RowBox[{"--", 
+             RowBox[{"--", 
+              RowBox[{"--", 
+               RowBox[{"--", 
+                RowBox[{"--", 
+                 RowBox[{"--", 
+                  RowBox[{"--", 
+                   RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{
+                    "--", "-"}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}\
+]}]}]}]}]}]}]}]}]}]}], " ", "*)"}], "\n", "\n", 
+   RowBox[{
+    RowBox[{"ClearAll", "[", 
+     RowBox[{
+     "ImaxFunc", ",", " ", "RespirationFunc", ",", " ", "SuitabilityFunc"}], 
+     "]"}], ";"}], "\n", "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{"TODO", ":", " ", 
+     RowBox[{
+      RowBox[{"adjust", " ", 
+       RowBox[{"TI", " ", "/", " ", "gamma"}], " ", "for", " ", "species"}], "-", 
+      RowBox[{"specific", " ", "thermal", " ", "curve"}]}]}], " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"ImaxFunc", "[", 
+      RowBox[{"T_", ",", " ", "optT_", ",", " ", "respBreadth_"}], "]"}], " ",
+      ":=", " ", 
+     RowBox[{"Exp", "[", 
+      RowBox[{
+       RowBox[{"-", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"T", " ", "-", " ", "optT"}], ")"}], "^", "2"}], ")"}]}], "/",
+        "respBreadth"}], "]"}]}], ";"}], "\n", "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+     RowBox[{"TODO", ":", " ", 
+      RowBox[{"refine", " ", "metabolic", " ", "parameters", " ", "ma"}]}], ",",
+      " ", "mb", ",", " ", "mc"}], " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"RespirationFunc", "[", 
+      RowBox[{"T_", ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"ma_", ",", " ", "mb_", ",", " ", "mc_"}], "}"}]}], "]"}], 
+     " ", ":=", " ", 
+     RowBox[{
+      RowBox[{"ma", "*", 
+       RowBox[{"Exp", "[", 
+        RowBox[{"mb", "*", "T"}], "]"}]}], " ", "+", " ", "mc"}]}], ";"}], 
+   "\n", "\n", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"**", "**", "**", "\n", "\"\<\>\""}], "\"\<SuitabilityFunc\>\"", 
+      RowBox[{
+       RowBox[{"\"\<\>\"", " ", "--"}], "--"}]}], "-", " ", "\n", 
+     RowBox[{
+      RowBox[{"-", " ", "function"}], " ", "defining", " ", "the", " ", 
+      "suitability", " ", "of", " ", "patch", " ", "i", " ", "based", " ", 
+      "on", " ", "the", " ", "resource", " ", "\n", "  ", "availability", " ",
+       "and", " ", "temperature", " ", "suitability", " ", "of", " ", "patch",
+       " ", 
+      RowBox[{"i", "\n", "**"}]}]}], "*****)"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"SuitabilityFunc", "[", 
+      RowBox[{"T_", ",", " ", "R_", ",", " ", "params_Association"}], "]"}], 
+     " ", ":=", "\n", " ", 
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"imax", ",", " ", "m"}], "}"}], ",", "\n", "   ", 
+       RowBox[{
+        RowBox[{"imax", " ", "=", " ", 
+         RowBox[{"ImaxFunc", "[", 
+          RowBox[{"T", ",", " ", 
+           RowBox[{"params", "[", "\"\<optT\>\"", "]"}], ",", " ", 
+           RowBox[{"params", "[", "\"\<respBreadth\>\"", "]"}]}], "]"}]}], ";",
+         "\n", "   ", 
+        RowBox[{"m", "    ", "=", " ", 
+         RowBox[{"RespirationFunc", "[", 
+          RowBox[{"T", ",", " ", 
+           RowBox[{"params", "[", "\"\<mParams\>\"", "]"}]}], "]"}]}], ";", 
+        "\n", "   ", 
+        RowBox[{"Max", "[", 
+         RowBox[{"0", ",", " ", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"imax", "*", "R"}], ")"}], "/", 
+            RowBox[{"(", 
+             RowBox[{"R", " ", "+", " ", 
+              RowBox[{"params", "[", "\"\<Rhalf\>\"", "]"}]}], ")"}]}], " ", "-",
+            " ", "m"}]}], "]"}]}]}], "\n", " ", "]"}]}], ";"}], "\n", " ", 
+   "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{"--", 
+     RowBox[{"--", 
+      RowBox[{"--", 
+       RowBox[{"--", 
+        RowBox[{"--", 
+         RowBox[{"--", 
+          RowBox[{"--", 
+           RowBox[{"--", 
+            RowBox[{"--", 
+             RowBox[{"--", 
+              RowBox[{"--", 
+               RowBox[{"--", 
+                RowBox[{"--", 
+                 RowBox[{"--", 
+                  RowBox[{"--", 
+                   RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{
+                    "--", "-"}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}\
+]}]}]}]}]}]}]}]}]}]}], " ", "*)"}], "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{"02", "  ", "Landscape", " ", "generator"}], " ", "*)"}], "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{"--", 
+     RowBox[{"--", 
+      RowBox[{"--", 
+       RowBox[{"--", 
+        RowBox[{"--", 
+         RowBox[{"--", 
+          RowBox[{"--", 
+           RowBox[{"--", 
+            RowBox[{"--", 
+             RowBox[{"--", 
+              RowBox[{"--", 
+               RowBox[{"--", 
+                RowBox[{"--", 
+                 RowBox[{"--", 
+                  RowBox[{"--", 
+                   RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{
+                    "--", "-"}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}\
+]}]}]}]}]}]}]}]}]}]}], " ", "*)"}], "\n", "\n", 
+   RowBox[{
+    RowBox[{"ClearAll", "[", "MakeLandscape", "]"}], ";"}], "\n", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"**", "**", "**", "\n", "\"\<\>\""}], "\"\<MakeLandscape\>\"", 
+       
+       RowBox[{
+        RowBox[{"\"\<\>\"", " ", "--"}], "--"}]}], "-", " ", "\n", 
+      RowBox[{
+       RowBox[{"-", " ", "function"}], " ", "that", " ", "makes", " ", "a", " ",
+        "landscape", " ", "of", " ", "size", " ", "nPatches"}]}], ",", " ", 
+     RowBox[{
+     "given", " ", "the", " ", "mean", " ", "and", " ", "\n", "  ", 
+      "variance", " ", "of", " ", "the", " ", 
+      RowBox[{"landscape", "'"}], "s", " ", "temperature", " ", "and", " ", 
+      "supply", " ", "resource", " ", 
+      RowBox[{"level", ".", " ", "Each"}], " ", "\n", "  ", "cell", " ", 
+      "gets", " ", "a", " ", "value", " ", "drawn", " ", "for", " ", "each", " ",
+       "of", " ", "R", " ", "and", " ", 
+      RowBox[{"T", ".", " ", "Then"}]}], ",", " ", 
+     RowBox[{
+     "a", " ", "set", " ", "of", " ", "raw", " ", "weights", " ", "\n", "  ", 
+      "are", " ", "assigned", " ", "based", " ", "on", " ", "the", " ", 
+      RowBox[{"SuitabilityFunc", ".", " ", "These"}], " ", "weights", " ", 
+      "are", " ", "then", " ", "\n", "  ", 
+      RowBox[{"normalized", ".", " ", "What"}], " ", "is", " ", "returned", " ",
+       "is", " ", "an", " ", "Assiciation", " ", "that", " ", "gives", " ", 
+      "the", " ", "T"}], ",", " ", "R", ",", " ", 
+     RowBox[{"and", "\n", "  ", "w", " ", 
+      RowBox[{"(", "weight", ")"}], " ", "for", " ", "each", " ", "cell"}], ",",
+      " ", 
+     RowBox[{"of", " ", "number", " ", 
+      RowBox[{"nPatches", "."}]}]}], "\n", "*******)"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"MakeLandscape", "[", 
+      RowBox[{
+      "nPatches_", ",", " ", "meanT_", ",", " ", "varT_", ",", " ", "meanR_", 
+       ",", " ", "varR_", ",", " ", "suitParams_"}], "]"}], " ", ":=", "\n", 
+     " ", 
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+        "temps", ",", " ", "supp", ",", " ", "wRaw", ",", " ", "wNorm"}], 
+        "}"}], ",", "\n", "   ", 
+       RowBox[{
+        RowBox[{"temps", " ", "=", " ", 
+         RowBox[{"RandomVariate", "[", 
+          RowBox[{
+           RowBox[{"NormalDistribution", "[", 
+            RowBox[{"meanT", ",", " ", "varT"}], "]"}], ",", " ", 
+           "nPatches"}], "]"}]}], ";", "\n", "   ", 
+        RowBox[{"supp", "  ", "=", " ", 
+         RowBox[{"RandomVariate", "[", 
+          RowBox[{
+           RowBox[{"NormalDistribution", "[", 
+            RowBox[{"meanR", ",", " ", "varR"}], "]"}], ",", " ", 
+           "nPatches"}], "]"}]}], ";", "\n", "   ", 
+        RowBox[{"wRaw", "  ", "=", " ", 
+         RowBox[{"MapThread", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"SuitabilityFunc", "[", 
+             RowBox[{"#1", ",", " ", "#2", ",", " ", "suitParams"}], "]"}], 
+            " ", "&"}], ",", " ", 
+           RowBox[{"{", 
+            RowBox[{"temps", ",", " ", "supp"}], "}"}]}], "]"}]}], ";", "\n", 
+        "   ", 
+        RowBox[{"wNorm", " ", "=", " ", 
+         RowBox[{"wRaw", "/", 
+          RowBox[{"Total", "[", "wRaw", "]"}]}]}], ";", " ", 
+        RowBox[{"(*", " ", 
+         RowBox[{
+          RowBox[{"ensure", " ", 
+           RowBox[{"\[Sum]", " ", "w_i"}]}], " ", "=", " ", "1"}], " ", 
+         "*)"}], "\n", "   ", 
+        RowBox[{"AssociationThread", "[", "\n", "     ", 
+         RowBox[{
+          RowBox[{"Range", "[", "nPatches", "]"}], ",", "\n", "     ", 
+          RowBox[{"MapThread", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"<|", 
+              RowBox[{
+               RowBox[{"\"\<T\>\"", " ", "->", " ", "#1"}], ",", " ", 
+               RowBox[{"\"\<R\>\"", " ", "->", " ", "#2"}], ",", " ", 
+               RowBox[{"\"\<w\>\"", " ", "->", " ", "#3"}]}], "|>"}], " ", 
+             "&"}], ",", " ", 
+            RowBox[{"{", 
+             RowBox[{"temps", ",", " ", "supp", ",", " ", "wNorm"}], "}"}]}], 
+           "]"}]}], "\n", "   ", "]"}]}]}], "\n", " ", "]"}]}], ";"}], "\n", 
+   " ", "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{"--", 
+     RowBox[{"--", 
+      RowBox[{"--", 
+       RowBox[{"--", 
+        RowBox[{"--", 
+         RowBox[{"--", 
+          RowBox[{"--", 
+           RowBox[{"--", 
+            RowBox[{"--", 
+             RowBox[{"--", 
+              RowBox[{"--", 
+               RowBox[{"--", 
+                RowBox[{"--", 
+                 RowBox[{"--", 
+                  RowBox[{"--", 
+                   RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{
+                    "--", "-"}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}\
+]}]}]}]}]}]}]}]}]}]}], " ", "*)"}], "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{"03", "  ", "\[CurlyEpsilon]", 
+     RowBox[{"(", "T", ")"}], " ", "constructor", " ", 
+     RowBox[{"(", 
+      RowBox[{"scalar", " ", "or", " ", "function"}], ")"}]}], 
+    "                               ", "*)"}], "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{"--", 
+     RowBox[{"--", 
+      RowBox[{"--", 
+       RowBox[{"--", 
+        RowBox[{"--", 
+         RowBox[{"--", 
+          RowBox[{"--", 
+           RowBox[{"--", 
+            RowBox[{"--", 
+             RowBox[{"--", 
+              RowBox[{"--", 
+               RowBox[{"--", 
+                RowBox[{"--", 
+                 RowBox[{"--", 
+                  RowBox[{"--", 
+                   RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{
+                    "--", "-"}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}\
+]}]}]}]}]}]}]}]}]}]}], " ", "*)"}], "\n", "\n", 
+   RowBox[{"ClearAll", "[", "MakeEpsilonFunc", "]"}], ";", "\n", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"**", "**", "**", "\n", "\"\<\>\""}], "\"\<MakeEpsilonFunc\>\"", 
+       RowBox[{
+        RowBox[{"\"\<\>\"", " ", "--"}], "--"}]}], "-", " ", "\n", 
+      RowBox[{
+       RowBox[{"-", " ", "probability"}], " ", "of", " ", "a", " ", "disease",
+        " ", "spreading", " ", "on", " ", "the", " ", "landscape", " ", 
+       "from", " ", "cell", " ", "i"}]}], ",", " ", 
+     RowBox[{
+      RowBox[{"assuming", " ", "\n", "  ", "I"}], " ", "=", " ", "1"}], ",", 
+     " ", 
+     RowBox[{
+      RowBox[{"\[Phi]i", 
+       RowBox[{"(", 
+        RowBox[{"k", ",", " ", 
+         RowBox[{"I", " ", "=", " ", "1"}]}], ")"}], " ", "is", " ", "1"}], 
+      " ", "\[Minus]", " ", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"1", " ", "\[Minus]", " ", 
+         RowBox[{"w", 
+          RowBox[{"(", "T", " ", ")"}], "\[CurlyEpsilon]", 
+          RowBox[{"(", "T", " ", ")"}]}]}], ")"}], "^", "S"}]}], ",", " ", 
+     RowBox[{
+      RowBox[{"so", " ", "as", " ", "long", " ", "as", " ", "I"}], " ", "=", 
+      " ", "1"}], ",", " ", 
+     RowBox[{
+     "we", " ", "set", "\n", "  ", "the", " ", "number", " ", "of", " ", 
+      "susceptibles"}], ",", " ", "S", ",", " ", 
+     RowBox[{
+      RowBox[{"then", " ", "calculate", " ", "the", " ", "temperature"}], "-", 
+      RowBox[{
+      "dependent", " ", "\n", "  ", "probability", " ", "of", " ", "spread", " ", 
+       RowBox[{"(", "eps", ")"}]}]}], ",", " ", 
+     RowBox[{"then", " ", "get", " ", "the", " ", "patch", " ", "weight"}], ",",
+      " ", 
+     RowBox[{"and", " ", "pultiply"}]}], " ", "\n", "*******)"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"MakeEpsilonFunc", "[", "epsSpec_", "]"}], " ", ":=", "\n", "  ", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"NumericQ", "[", "epsSpec", "]"}], ",", "\n", "     ", 
+       RowBox[{"Function", "[", 
+        RowBox[{
+         RowBox[{"{", "T", "}"}], ",", " ", "epsSpec"}], "]"}], ",", "   ", 
+       RowBox[{"(*", " ", 
+        RowBox[{"constant", " ", "transmission", " ", "prob"}], " ", "*)"}], 
+       "\n", "     ", "epsSpec"}], "                   ", 
+      RowBox[{"(*", " ", 
+       RowBox[{"already", " ", "a", " ", "function"}], " ", "*)"}], "\n", 
+      "  ", "]"}]}], ";"}], "\n", "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{"TODO", ":", " ", 
+     RowBox[{
+     "choose", " ", "one", " ", "of", " ", "the", " ", "following", " ", 
+      "definitions"}]}], " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"epsFunc", " ", "=", " ", 
+     RowBox[{"MakeEpsilonFunc", "[", "1", "]"}]}], ";"}], 
+   "                                        ", 
+   RowBox[{"(*", " ", 
+    RowBox[{"constant", " ", "1"}], " ", "*)"}], "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+     RowBox[{"epsFunc", " ", "=", " ", 
+      RowBox[{"MakeEpsilonFunc", "[", "0.3", "]"}]}], ";"}], 
+    "                                   ", 
+    RowBox[{"(*", " ", 
+     RowBox[{"constant", " ", "0.3"}], " ", "*)"}], " ", "*)"}], "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+     RowBox[{"epsFunc", " ", "=", " ", 
+      RowBox[{"MakeEpsilonFunc", "[", 
+       RowBox[{"Function", "[", 
+        RowBox[{
+         RowBox[{"{", "T", "}"}], ",", " ", 
+         RowBox[{"1", "/", 
+          RowBox[{"(", 
+           RowBox[{"1", " ", "+", " ", 
+            RowBox[{"Exp", "[", 
+             RowBox[{
+              RowBox[{"-", "0.25"}], " ", 
+              RowBox[{"(", 
+               RowBox[{"T", " ", "-", " ", "22"}], ")"}]}], "]"}]}], 
+           ")"}]}]}], "]"}], "]"}]}], ";"}], " ", "*)"}], "\n", " ", "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{"--", 
+     RowBox[{"--", 
+      RowBox[{"--", 
+       RowBox[{"--", 
+        RowBox[{"--", 
+         RowBox[{"--", 
+          RowBox[{"--", 
+           RowBox[{"--", 
+            RowBox[{"--", 
+             RowBox[{"--", 
+              RowBox[{"--", 
+               RowBox[{"--", 
+                RowBox[{"--", 
+                 RowBox[{"--", 
+                  RowBox[{"--", 
+                   RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{
+                    "--", "-"}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}\
+]}]}]}]}]}]}]}]}]}]}], " ", "*)"}], "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+     RowBox[{"04", "  ", "Patch"}], "-", 
+     RowBox[{"level", " ", "\[CurlyPhi]", " ", "and", " ", "landscape"}], "-", 
+     RowBox[{"level", " ", "\[CurlyPhi]"}]}], " ", "*)"}], "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{"--", 
+     RowBox[{"--", 
+      RowBox[{"--", 
+       RowBox[{"--", 
+        RowBox[{"--", 
+         RowBox[{"--", 
+          RowBox[{"--", 
+           RowBox[{"--", 
+            RowBox[{"--", 
+             RowBox[{"--", 
+              RowBox[{"--", 
+               RowBox[{"--", 
+                RowBox[{"--", 
+                 RowBox[{"--", 
+                  RowBox[{"--", 
+                   RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{
+                    "--", "-"}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}\
+]}]}]}]}]}]}]}]}]}]}], " ", "*)"}], "\n", "\n", 
+   RowBox[{
+    RowBox[{"ClearAll", "[", 
+     RowBox[{"PatchPhi", ",", " ", "PhiLandscape"}], "]"}], ";"}], "\n", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"**", "**", "**", "\n", "\"\<\>\""}], "\"\<PhiPatch\>\"", 
+       RowBox[{
+        RowBox[{"\"\<\>\"", " ", "--"}], "--"}]}], "-", " ", "\n", 
+      RowBox[{
+       RowBox[{"-", " ", "probability"}], " ", "of", " ", "a", " ", "disease",
+        " ", "spreading", " ", "on", " ", "the", " ", "landscape", " ", 
+       "from", " ", "cell", " ", "i"}]}], ",", " ", 
+     RowBox[{
+      RowBox[{"assuming", " ", "\n", "  ", "I"}], " ", "=", " ", "1"}], ",", 
+     " ", 
+     RowBox[{
+      RowBox[{"\[Phi]i", 
+       RowBox[{"(", 
+        RowBox[{"k", ",", " ", 
+         RowBox[{"I", " ", "=", " ", "1"}]}], ")"}], " ", "is", " ", "1"}], 
+      " ", "\[Minus]", " ", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"1", " ", "\[Minus]", " ", 
+         RowBox[{"w", 
+          RowBox[{"(", "T", " ", ")"}], "\[CurlyEpsilon]", 
+          RowBox[{"(", "T", " ", ")"}]}]}], ")"}], "^", "S"}]}], ",", " ", 
+     RowBox[{
+      RowBox[{"so", " ", "as", " ", "long", " ", "as", " ", "I"}], " ", "=", 
+      " ", "1"}], ",", " ", 
+     RowBox[{
+     "we", " ", "set", "\n", "  ", "the", " ", "number", " ", "of", " ", 
+      "susceptibles"}], ",", " ", "S", ",", " ", 
+     RowBox[{
+      RowBox[{"then", " ", "calculate", " ", "the", " ", "temperature"}], "-", 
+      RowBox[{
+      "dependent", " ", "\n", "  ", "probability", " ", "of", " ", "spread", " ", 
+       RowBox[{"(", "eps", ")"}]}]}], ",", " ", 
+     RowBox[{"then", " ", "get", " ", "the", " ", "patch", " ", "weight"}], ",",
+      " ", 
+     RowBox[{"and", " ", "pultiply"}]}], " ", "\n", "*******)"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"PhiI", "[", 
+      RowBox[{"Stotal_", ",", " ", "patch_", ",", " ", "epsF_"}], "]"}], " ", 
+     ":=", "\n", "  ", 
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"w", " ", "=", " ", 
+          RowBox[{"patch", "[", "\"\<w\>\"", "]"}]}], ",", " ", 
+         RowBox[{"eps", " ", "=", " ", 
+          RowBox[{"epsF", "[", 
+           RowBox[{"patch", "[", "\"\<T\>\"", "]"}], "]"}]}]}], "}"}], ",", 
+       "\n", "    ", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"1", " ", "-", " ", 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"1", " ", "-", " ", "w"}], ")"}], "*", 
+            RowBox[{"(", "eps", ")"}]}], ")"}]}], ")"}], "^", "Stotal"}]}], 
+      "\n", "  ", "]"}]}], ";"}], "\n", "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{"phi", " ", "=", " ", 
+     RowBox[{
+     "\[CapitalSigma]", " ", "\[CapitalPhi]_i", " ", "over", " ", "all", " ", 
+      "patches"}]}], " ", "*)"}], "\n", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"**", "**", "**", "\n", "\"\<\>\""}], "\"\<PhiFromLandscape\>\"", 
+      RowBox[{
+       RowBox[{"\"\<\>\"", " ", "--"}], "--"}]}], "-", " ", "\n", 
+     RowBox[{
+      RowBox[{"-", " ", "This"}], " ", "applies", " ", "the", " ", "PhiPatch",
+       " ", "funtion", " ", "across", " ", "all", " ", "patches", " ", 
+      RowBox[{"we", "'"}], "re", " ", "using", " ", "here"}]}], "\n", 
+    "*******)"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"PhiFromLandscape", "[", 
+      RowBox[{
+      "landscape_Association", ",", " ", "Stotal_", ",", " ", "epsF_"}], 
+      "]"}], " ", ":=", "\n", "  ", 
+     RowBox[{"Total", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"PhiI", "[", 
+         RowBox[{"Stotal", ",", " ", "#", ",", " ", "epsF"}], "]"}], " ", 
+        "&"}], " ", "/@", " ", 
+       RowBox[{"Values", "[", "landscape", "]"}]}], "]"}]}], 
+    ";"}]}]}]], "Code",
+ CellChangeTimes->{{3.95950742224419*^9, 3.9595074489649487`*^9}, {
+  3.959507983744258*^9, 3.959508028310223*^9}, {3.9595125490831423`*^9, 
+  3.959512585969202*^9}, {3.959512848352207*^9, 3.9595128885498343`*^9}, {
+  3.95951343506291*^9, 3.9595134504074173`*^9}, {3.9595135538124437`*^9, 
+  3.959513577369294*^9}, {3.959513607657843*^9, 3.95951363320216*^9}, {
+  3.95951366779451*^9, 3.959513730170858*^9}, {3.959513780786682*^9, 
+  3.959513783708008*^9}, {3.959513846859232*^9, 3.959513879982222*^9}, {
+  3.959513999721614*^9, 3.959514117480803*^9}, {3.9595141572623262`*^9, 
+  3.9595142269836197`*^9}, {3.9595142650879583`*^9, 3.9595143086364117`*^9}, {
+  3.9595143795582542`*^9, 3.959514469695115*^9}, {3.959515575868739*^9, 
+  3.95951558285863*^9}, {3.9595157420358477`*^9, 3.959515796789145*^9}, {
+  3.959515839935278*^9, 3.959516073160411*^9}, {3.959516149963805*^9, 
+  3.959516160547914*^9}},ExpressionUUID->"0f204c9d-0868-4fc4-bc98-\
+80ae266234d2"]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{808, 866},
+WindowMargins->{{Automatic, 72}, {Automatic, 22}},
+FrontEndVersion->"14.2 for Mac OS X ARM (64-bit) (March 16, 2025)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"ba552914-0b13-4788-a3b8-0c0bd77179c6"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[576, 22, 168, 3, 96, "Title",ExpressionUUID->"36f1bb4e-9c88-4efb-8377-b37277ff2bb8"],
+Cell[747, 27, 276, 6, 55, "Text",ExpressionUUID->"f725785b-a392-4e08-9396-3a7472c248f0"],
+Cell[CellGroupData[{
+Cell[1048, 37, 165, 3, 66, "Section",ExpressionUUID->"4f7a19e6-388d-4acb-9c8e-a248e161d63d"],
+Cell[1216, 42, 503, 9, 55, "Text",ExpressionUUID->"5f2387a8-d553-4262-b27d-17f92eab6c5d"],
+Cell[1722, 53, 30794, 830, 2181, "Code",ExpressionUUID->"0f204c9d-0868-4fc4-bc98-80ae266234d2"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
