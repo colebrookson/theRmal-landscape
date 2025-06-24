@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       154,          7]
-NotebookDataLength[     30991,        856]
-NotebookOptionsPosition[     30205,        834]
-NotebookOutlinePosition[     30599,        850]
-CellTagsIndexPosition[     30556,        847]
+NotebookDataLength[     41610,       1098]
+NotebookOptionsPosition[     40823,       1076]
+NotebookOutlinePosition[     41217,       1092]
+CellTagsIndexPosition[     41174,       1089]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -767,7 +767,7 @@ Cell[BoxData[
    RowBox[{
     RowBox[{
      RowBox[{"PhiI", "[", 
-      RowBox[{"Stotal_", ",", " ", "patch_", ",", " ", "epsF_"}], "]"}], " ", 
+      RowBox[{"totalS_", ",", " ", "patch_", ",", " ", "epsF_"}], "]"}], " ", 
      ":=", "\n", "  ", 
      RowBox[{"Module", "[", 
       RowBox[{
@@ -786,8 +786,8 @@ Cell[BoxData[
            RowBox[{
             RowBox[{"(", 
              RowBox[{"1", " ", "-", " ", "w"}], ")"}], "*", 
-            RowBox[{"(", "eps", ")"}]}], ")"}]}], ")"}], "^", "Stotal"}]}], 
-      "\n", "  ", "]"}]}], ";"}], "\n", "\n", "\n", 
+            RowBox[{"(", "eps", ")"}]}], ")"}]}], ")"}], "^", "totalS"}]}], 
+      "\n", "  ", "]"}]}], ";"}], "\n", "\n", 
    RowBox[{"(*", 
     RowBox[{
      RowBox[{
@@ -809,26 +809,268 @@ Cell[BoxData[
     RowBox[{
      RowBox[{"PhiFromLandscape", "[", 
       RowBox[{
-      "landscape_Association", ",", " ", "Stotal_", ",", " ", "epsF_"}], 
+      "landscape_Association", ",", " ", "totalS_", ",", " ", "epsF_"}], 
       "]"}], " ", ":=", "\n", "  ", 
      RowBox[{"Total", "[", 
       RowBox[{
        RowBox[{
         RowBox[{"PhiI", "[", 
-         RowBox[{"Stotal", ",", " ", "#", ",", " ", "epsF"}], "]"}], " ", 
+         RowBox[{"totalS", ",", " ", "#", ",", " ", "epsF"}], "]"}], " ", 
         "&"}], " ", "/@", " ", 
-       RowBox[{"Values", "[", "landscape", "]"}]}], "]"}]}], 
-    ";"}]}]}]], "Code",
- CellChangeTimes->CompressedData["
-1:eJwdyjtIAgEAh/EjpwoHFwsLQcEgTmmJ7EE+IkEoISR6gBZczyESiR4HIRcR
-PQaRavAgSJusjBpCFwulKEGHC3pAFohD0nA0nUIP7P43fPyWT0N5nFNVBEGo
-xOAsd9/VzPDWt7zaDEtceQ2O8tubUHV8lCBFL2XmFLTbagvQFFQUoUtGkXrR
-QLXDAHcqHZ2w54HshnK5YIH1K029MDRH2+Hpsm0AMnp2CBKRkuSjLzcG3fMV
-Ci7Vlb3wijpn4PdkZANy9Lgf+jntHlx17wdh+7s3DClTLApj2Z82g+gHnTPC
-E12qD55ZWCfM8n/DUKnVLULfy7UPrm8pGChk0geQmFGGoLUhGYUjbOuF9E8Y
-4/BXXZS0f8UTsPHmMAmphdIt7Cc+72BmejcDC46aLHxlNBxMuwTJ/GDgCerD
-Lc/wH6jxzNk=
-  "],ExpressionUUID->"0f204c9d-0868-4fc4-bc98-80ae266234d2"]
+       RowBox[{"Values", "[", "landscape", "]"}]}], "]"}]}], ";"}], "\n", 
+   "\n", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"**", "**", "**", "\n", "\"\<\>\""}], "\"\<ComputePhi\>\"", 
+       RowBox[{
+        RowBox[{"\"\<\>\"", " ", "--"}], "--"}]}], "-", " ", "\n", 
+      RowBox[{
+       RowBox[{"-", "  ", "Function"}], " ", "applies", " ", "the", " ", 
+       "PhiFromLandscape", " ", "function", " ", "across", " ", "the", " ", 
+       "landscape", " ", "\n", "   ", "we", " ", "give", " ", "it", " ", 
+       "some", " ", "number", " ", "of", " ", "times"}]}], ",", " ", 
+     RowBox[{
+     "and", " ", "then", " ", "takes", " ", "the", " ", "mean", " ", "and", " ",
+       "stdev", " ", "of", "\n", "   ", "that", " ", "landscape", " ", 
+      RowBox[{"value", "."}]}]}], " ", "\n", "*******)"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"ComputePhi", "[", 
+      RowBox[{
+      "nPatches_", ",", " ", "meanT_", ",", " ", "varT_", ",", " ", "meanR_", 
+       ",", " ", "varR_", ",", " ", "suitParams_", ",", "\n", "\t\t   ", 
+       "totalS_", ",", " ", "epsF_", ",", " ", "nReps_"}], "]"}], " ", ":=", 
+     "\n", "\t", 
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", "phiVals", "}"}], ",", "\n", "\t\t", 
+       RowBox[{
+        RowBox[{"phiVals", " ", "=", " ", 
+         RowBox[{"Table", "[", "\n", "\t\t\t", 
+          RowBox[{
+           RowBox[{"With", "[", "\n", "\t\t\t", 
+            RowBox[{"(*", " ", 
+             RowBox[{
+              RowBox[{
+              "first", " ", "get", " ", "the", " ", "landscape", " ", "to", " ",
+                "pass", " ", "to", " ", "the", " ", "phi"}], "-", 
+              RowBox[{"getting", " ", "function"}]}], "*)"}], "\n", "\t\t\t", 
+            
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"landscape", " ", "=", " ", "\n", "\t\t\t\t", 
+               RowBox[{"MakeLandscape", "[", 
+                RowBox[{
+                "nPatches", ",", " ", "meanT", ",", " ", "varT", ",", " ", 
+                 "meanR", ",", " ", "varR", ",", " ", "suitParams"}], "]"}]}],
+               "\n", "\t\t\t", "}"}], ",", "\n", "\t\t\t", 
+             RowBox[{"(*", " ", 
+              RowBox[{
+              "now", " ", "calculate", " ", "the", " ", "phi", " ", "from", " ",
+                "that", " ", "landscape"}], "*)"}], "\n", "\t\t\t", 
+             RowBox[{"PhiFromLandscape", "[", 
+              RowBox[{"landscape", ",", " ", "totalS", ",", " ", "epsF"}], 
+              "]"}]}], "\n", "\t\t\t", "]"}], ",", " ", "\n", "\t\t\t", 
+           RowBox[{"{", "nReps", "}"}]}], " ", 
+          RowBox[{"(*", " ", 
+           RowBox[{
+           "repeat", " ", "the", " ", "table", " ", "calculation", " ", 
+            "this", " ", "many", " ", "times"}], "*)"}], "\n", "\t\t", 
+          "]"}]}], ";", "\n", "\t\t", 
+        RowBox[{"(*", " ", 
+         RowBox[{
+         "calculate", " ", "the", " ", "mean", " ", "and", " ", "standard", " ",
+           "deviation"}], " ", "*)"}], "\n", "\t\t", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"Mean", "[", "phiVals", "]"}], ",", " ", 
+          RowBox[{"StandardDeviation", "[", "phiVals", "]"}]}], "}"}]}]}], 
+      "\n", "\t", "]"}]}], ";"}], "\n", "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{"--", 
+     RowBox[{"--", 
+      RowBox[{"--", 
+       RowBox[{"--", 
+        RowBox[{"--", 
+         RowBox[{"--", 
+          RowBox[{"--", 
+           RowBox[{"--", 
+            RowBox[{"--", 
+             RowBox[{"--", 
+              RowBox[{"--", 
+               RowBox[{"--", 
+                RowBox[{"--", 
+                 RowBox[{"--", 
+                  RowBox[{"--", 
+                   RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{
+                    "--", "-"}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}\
+]}]}]}]}]}]}]}]}]}]}], " ", "*)"}], "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+     RowBox[{"05", "  ", "Simulation"}], "-", 
+     RowBox[{"level", " ", "function"}]}], " ", "*)"}], "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{"--", 
+     RowBox[{"--", 
+      RowBox[{"--", 
+       RowBox[{"--", 
+        RowBox[{"--", 
+         RowBox[{"--", 
+          RowBox[{"--", 
+           RowBox[{"--", 
+            RowBox[{"--", 
+             RowBox[{"--", 
+              RowBox[{"--", 
+               RowBox[{"--", 
+                RowBox[{"--", 
+                 RowBox[{"--", 
+                  RowBox[{"--", 
+                   RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{"--", 
+                    RowBox[{
+                    "--", "-"}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}\
+]}]}]}]}]}]}]}]}]}]}], " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"SimulateTransmission", "[", 
+     RowBox[{
+     "nReps_", ",", " ", "nPatches_", ",", " ", "totalS_", ",", " ", 
+      "varRList_", ",", " ", "varTList_", ",", " ", "\n", "\t\t\t\t\t", 
+      "meanRList_", ",", " ", "meanTList_", ",", " ", "suitParams_", ",", " ",
+       "epsLabel_", ",", " ", "epsF_"}], "]"}], " ", ":=", "\n", "\t", 
+    RowBox[{"Modeule", "[", "\n", "\t\t", 
+     RowBox[{
+      RowBox[{
+       RowBox[{
+        RowBox[{"{", "\n", "\t\t\t", 
+         RowBox[{
+         "resultGrid", ",", " ", "phiMeans", ",", " ", "phiSDs", ",", " ", 
+          "surfaceData", ",", " ", "surfacePlot", ",", "\n", "\t\t\t", 
+          "phiSliceT", ",", " ", "phiSliceR", ",", " ", "plotT", ",", " ", 
+          "plotR", ",", " ", "sliceGrid"}], "\n", "\t\t", "}"}], "\n", "\t\t",
+         "\n", "\t\t", 
+        RowBox[{"(*", " ", 
+         RowBox[{"first", ",", " ", 
+          RowBox[{
+          "get", " ", "the", " ", "values", " ", "of", " ", "the", " ", 
+           "grid", " ", "for", " ", "the", " ", "values", " ", "of", " ", 
+           "interest"}]}], "*)"}], "\n", "\t\t", "resultGrid"}], " ", "=", 
+       " ", 
+       RowBox[{"ParallelTable", "[", "\n", "\t\t\t", 
+        RowBox[{
+         RowBox[{"ComputePhi", "[", 
+          RowBox[{
+          "nPatches", ",", " ", "meanT", ",", " ", "varT", ",", " ", "meanR", 
+           ",", " ", "varR", ",", " ", "suitParams", ",", "\n", 
+           "\t\t               ", "totalS", ",", " ", "epsF", ",", " ", 
+           "nReps"}], "]"}], ",", "\n", "\t\t    ", 
+         RowBox[{"(*", " ", 
+          RowBox[{
+          "repeat", " ", "this", " ", "calculation", " ", "across", " ", 
+           "the", " ", "various", " ", "lists", " ", "of", " ", "vals"}], " ",
+           "*)"}], "\n", "\t\t\t", 
+         RowBox[{"{", 
+          RowBox[{"varT", ",", " ", "varTList"}], "}"}], ",", " ", "\n", 
+         "\t\t\t", 
+         RowBox[{"{", 
+          RowBox[{"varR", ",", " ", "varRList"}], "}"}], ",", "\n", "\t\t\t", 
+         
+         RowBox[{"{", 
+          RowBox[{"meanT", ",", " ", "meanTList"}], "}"}], ",", " ", "\n", 
+         "\t\t\t", 
+         RowBox[{"{", 
+          RowBox[{"meanR", ",", " ", "meanRList"}], "}"}]}], "\n", "\t\t", 
+        "]"}]}], ";", "\n", "\t\t", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Print", "[", "\"\<simulated results grid\>\"", "]"}], "\n", 
+        "\t\t", "\n", "\t\t", 
+        RowBox[{"(*", " ", 
+         RowBox[{
+         "calculate", " ", "means", " ", "and", " ", "SDs", " ", "of", " ", 
+          "the", " ", "phi", " ", "values"}], "*)"}], "\n", "\t\t", 
+        "phiMeans"}], " ", "=", " ", 
+       RowBox[{"Map", "[", 
+        RowBox[{"First", ",", " ", "resultGrid", ",", " ", 
+         RowBox[{"{", "5", "}"}]}], "]"}]}], ";", " ", 
+      RowBox[{"(*", 
+       RowBox[{"TODO", " ", "-", " ", 
+        RowBox[{
+        "check", " ", "that", " ", "5", " ", "is", " ", "the", " ", "right", " ",
+          "level", " ", "here"}]}], "*)"}], "\n", "\t\t", 
+      RowBox[{"phiSDs", " ", "=", " ", 
+       RowBox[{"Map", "[", 
+        RowBox[{"Last", ",", " ", "resultGrid", ",", " ", 
+         RowBox[{"{", "5", "}"}]}], "]"}]}], ";"}], "\n", "\t", 
+     "]"}]}]}]}]], "Code",
+ CellChangeTimes->{{3.95950742224419*^9, 3.9595074489649487`*^9}, {
+   3.959507983744258*^9, 3.959508028310223*^9}, {3.9595125490831423`*^9, 
+   3.959512585969202*^9}, {3.959512848352207*^9, 3.9595128885498343`*^9}, {
+   3.95951343506291*^9, 3.9595134504074173`*^9}, {3.9595135538124437`*^9, 
+   3.959513577369294*^9}, {3.959513607657843*^9, 3.95951363320216*^9}, {
+   3.95951366779451*^9, 3.959513730170858*^9}, {3.959513780786682*^9, 
+   3.959513783708008*^9}, {3.959513846859232*^9, 3.959513879982222*^9}, {
+   3.959513999721614*^9, 3.959514117480803*^9}, {3.9595141572623262`*^9, 
+   3.9595142269836197`*^9}, {3.9595142650879583`*^9, 
+   3.9595143086364117`*^9}, {3.9595143795582542`*^9, 3.959514469695115*^9}, {
+   3.959515575868739*^9, 3.95951558285863*^9}, {3.9595157420358477`*^9, 
+   3.959515796789145*^9}, {3.959515839935278*^9, 3.959516073160411*^9}, {
+   3.959516149963805*^9, 3.959516160547914*^9}, {3.959516390274897*^9, 
+   3.9595164167000732`*^9}, {3.959516518003327*^9, 3.9595165456437187`*^9}, {
+   3.959516601730895*^9, 3.9595166072225323`*^9}, {3.959516645747959*^9, 
+   3.959516676992567*^9}, {3.959516711701585*^9, 3.9595167272812862`*^9}, {
+   3.959516764575048*^9, 3.959516768322007*^9}, {3.959516801046979*^9, 
+   3.959516807667576*^9}, {3.9595168445103607`*^9, 3.9595168494884243`*^9}, 
+   3.959749522279314*^9, {3.959749557027317*^9, 3.959749609092189*^9}, {
+   3.959749639749547*^9, 3.959749750465431*^9}, {3.959761649556262*^9, 
+   3.959761771002925*^9}, {3.9597618192337933`*^9, 3.959761884448906*^9}, {
+   3.959761915632081*^9, 3.959762100660336*^9}, {3.959762141452908*^9, 
+   3.959762237273574*^9}, {3.959762284284347*^9, 3.959762393935479*^9}, 
+   3.959762535669243*^9, {3.9597626513352413`*^9, 3.9597626950909367`*^9}, {
+   3.959762748347601*^9, 3.959762794177744*^9}, {3.959762893291163*^9, 
+   3.959762933799553*^9}, {3.9597630128577347`*^9, 3.959763021914916*^9}, {
+   3.959763069948337*^9, 3.959763127739173*^9}, {3.959763180601322*^9, 
+   3.9597632562705517`*^9}, {3.959763289435318*^9, 3.9597633396279097`*^9}, {
+   3.959764046070815*^9, 
+   3.9597640828653307`*^9}},ExpressionUUID->"0f204c9d-0868-4fc4-bc98-\
+80ae266234d2"]
 }, Open  ]]
 }, Open  ]]
 },
@@ -855,7 +1097,7 @@ Cell[747, 27, 276, 6, 55, "Text",ExpressionUUID->"f725785b-a392-4e08-9396-3a7472
 Cell[CellGroupData[{
 Cell[1048, 37, 165, 3, 66, "Section",ExpressionUUID->"4f7a19e6-388d-4acb-9c8e-a248e161d63d"],
 Cell[1216, 42, 503, 9, 55, "Text",ExpressionUUID->"5f2387a8-d553-4262-b27d-17f92eab6c5d"],
-Cell[1722, 53, 28455, 777, 2143, "Code",ExpressionUUID->"0f204c9d-0868-4fc4-bc98-80ae266234d2"]
+Cell[1722, 53, 39073, 1019, 3105, "Code",ExpressionUUID->"0f204c9d-0868-4fc4-bc98-80ae266234d2"]
 }, Open  ]]
 }, Open  ]]
 }
