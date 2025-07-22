@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       154,          7]
-NotebookDataLength[      3012,         95]
-NotebookOptionsPosition[      2323,         74]
-NotebookOutlinePosition[      2715,         90]
-CellTagsIndexPosition[      2672,         87]
+NotebookDataLength[      4689,        128]
+NotebookOptionsPosition[      3775,        103]
+NotebookOutlinePosition[      4167,        119]
+CellTagsIndexPosition[      4124,        116]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -34,6 +34,31 @@ resource availability and temperature. \
   3.96219089277697*^9, 3.962190897753039*^9}, {3.962190928888867*^9, 
   3.962190942581951*^9}},ExpressionUUID->"071d693b-02eb-4144-af51-\
 79ee8493aa38"],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Table of Contents:
+   1. transmission as a process of co-location on a weighted landscape 
+   2. transmission on a landscape with a known (constant) distribution
+   3. transmission on a landscape with a known (uniform) distribution
+   4. transmission on a landscape with a known (exponential) distribution
+   5. calculating a landscape-level R0 at the beginning of an infection with
+   increasing heterogeneity 
+   \t5-1. aside on proving that large enough numbers of patches effectively \t\
+\tfulfills the assumption that patch occupancy probabilities are uniformly
+   \tdistributed on the interval (0, 2/n), for large enough n
+   \ttheir sum converges to 1 (satisfying their use as weights)
+   6. transmission on a realistic landscape and the impact of s vs t on \
+driving 
+   probability of spread\
+\>", "Subtitle",
+ CellChangeTimes->{{3.962192304644463*^9, 3.9621923634610558`*^9}, {
+  3.96219240140772*^9, 3.96219245486756*^9}, {3.9621925422263737`*^9, 
+  3.962192571100974*^9}, {3.962192663698142*^9, 3.962192667184989*^9}, {
+  3.9621932051452208`*^9, 3.9621932985600452`*^9}, {3.962193343500682*^9, 
+  3.962193367189501*^9}, {3.962193425213478*^9, 
+  3.9621934855781*^9}},ExpressionUUID->"5fddb421-139b-4300-8ed3-76cf4ed797e1"],
 
 Cell[CellGroupData[{
 
@@ -61,18 +86,22 @@ Cell[BoxData[
       RowBox[{"{", 
        RowBox[{"baseDir", ",", "\"\<figs\>\""}], "}"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
    RowBox[{
-    RowBox[{
-     RowBox[{"relativePath", "[", "parts__", "]"}], ":=", 
-     RowBox[{"FileNameJoin", "[", 
-      RowBox[{"{", 
-       RowBox[{"baseDir", ",", "parts"}], "}"}], "]"}]}], ";"}]}]}]], "Code",
- CellChangeTimes->{{3.9621909960640182`*^9, 
-  3.962191003864688*^9}},ExpressionUUID->"bdbf9023-b829-4363-b6e6-\
-27baee5bc5c9"]
+    RowBox[{"relativePath", "[", "parts__", "]"}], ":=", 
+    RowBox[{"FileNameJoin", "[", 
+     RowBox[{"{", 
+      RowBox[{"baseDir", ",", "parts"}], "}"}], "]"}]}]}]}]], "Code",
+ CellChangeTimes->{{3.9621909960640182`*^9, 3.96219101171208*^9}},
+ CellLabel->"In[1]:=",ExpressionUUID->"bdbf9023-b829-4363-b6e6-27baee5bc5c9"]
+}, Open  ]],
+
+Cell["1 - transmission & co-location", "Section",
+ CellChangeTimes->{{3.962193704538856*^9, 
+  3.962193714024947*^9}},ExpressionUUID->"ba4353db-02da-4d8f-8ae4-\
+ad0e751fe1f3"]
 }, Open  ]]
 }, Open  ]]
 },
-WindowSize->{808, 866},
+WindowSize->{870, 866},
 WindowMargins->{{4, Automatic}, {Automatic, 4}},
 FrontEndVersion->"14.2 for Mac OS X ARM (64-bit) (March 16, 2025)",
 StyleDefinitions->"Default.nb",
@@ -93,8 +122,12 @@ Cell[CellGroupData[{
 Cell[576, 22, 160, 3, 96, "Title",ExpressionUUID->"b538b393-b660-4958-9bf0-8a29604ee37f"],
 Cell[739, 27, 442, 8, 55, "Text",ExpressionUUID->"071d693b-02eb-4144-af51-79ee8493aa38"],
 Cell[CellGroupData[{
-Cell[1206, 39, 201, 4, 66, "Section",ExpressionUUID->"e78c1de1-8c99-4ef2-ba7b-dccf218c0e9b"],
-Cell[1410, 45, 885, 25, 107, "Code",ExpressionUUID->"bdbf9023-b829-4363-b6e6-27baee5bc5c9"]
+Cell[1206, 39, 1244, 21, 426, "Subtitle",ExpressionUUID->"5fddb421-139b-4300-8ed3-76cf4ed797e1"],
+Cell[CellGroupData[{
+Cell[2475, 64, 201, 4, 66, "Section",ExpressionUUID->"e78c1de1-8c99-4ef2-ba7b-dccf218c0e9b"],
+Cell[2679, 70, 878, 23, 107, "Code",ExpressionUUID->"bdbf9023-b829-4363-b6e6-27baee5bc5c9"]
+}, Open  ]],
+Cell[3572, 96, 175, 3, 66, "Section",ExpressionUUID->"ba4353db-02da-4d8f-8ae4-ad0e751fe1f3"]
 }, Open  ]]
 }, Open  ]]
 }
