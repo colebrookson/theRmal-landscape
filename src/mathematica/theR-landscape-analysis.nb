@@ -1,0 +1,103 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Wolfram 14.2' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       154,          7]
+NotebookDataLength[      3012,         95]
+NotebookOptionsPosition[      2323,         74]
+NotebookOutlinePosition[      2715,         90]
+CellTagsIndexPosition[      2672,         87]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Thermal Landscape ", "Title",
+ CellChangeTimes->{{3.962190085292677*^9, 
+  3.96219008821032*^9}},ExpressionUUID->"b538b393-b660-4958-9bf0-\
+8a29604ee37f"],
+
+Cell["\<\
+This notebook contains all the analysis thus far required and done to explore \
+how disease spread may be modulated by components of the landscape such as \
+resource availability and temperature. \
+\>", "Text",
+ CellChangeTimes->{{3.9621901097899847`*^9, 3.962190150590192*^9}, {
+  3.96219089277697*^9, 3.962190897753039*^9}, {3.962190928888867*^9, 
+  3.962190942581951*^9}},ExpressionUUID->"071d693b-02eb-4144-af51-\
+79ee8493aa38"],
+
+Cell[CellGroupData[{
+
+Cell["Set up ", "Section",
+ CellChangeTimes->{{3.962190948038754*^9, 3.962190949920525*^9}, {
+  3.962190984037097*^9, 
+  3.962190992876903*^9}},ExpressionUUID->"e78c1de1-8c99-4ef2-ba7b-\
+dccf218c0e9b"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"First", ",", " ", 
+    RowBox[{
+    "some", " ", "directory", " ", "stuff", " ", "for", " ", "outputting", " ",
+      "plot"}]}], "*)"}], "\n", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+    "baseDir", "=", "\"\</Users/colebrookson/github/theRmal-landscape/\>\""}],
+     ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"figsDir", "=", 
+     RowBox[{"FileNameJoin", "[", 
+      RowBox[{"{", 
+       RowBox[{"baseDir", ",", "\"\<figs\>\""}], "}"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"relativePath", "[", "parts__", "]"}], ":=", 
+     RowBox[{"FileNameJoin", "[", 
+      RowBox[{"{", 
+       RowBox[{"baseDir", ",", "parts"}], "}"}], "]"}]}], ";"}]}]}]], "Code",
+ CellChangeTimes->{{3.9621909960640182`*^9, 
+  3.962191003864688*^9}},ExpressionUUID->"bdbf9023-b829-4363-b6e6-\
+27baee5bc5c9"]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{808, 866},
+WindowMargins->{{4, Automatic}, {Automatic, 4}},
+FrontEndVersion->"14.2 for Mac OS X ARM (64-bit) (March 16, 2025)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"f516ebe2-2942-4c14-8ea2-04b9e5dcb687"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[576, 22, 160, 3, 96, "Title",ExpressionUUID->"b538b393-b660-4958-9bf0-8a29604ee37f"],
+Cell[739, 27, 442, 8, 55, "Text",ExpressionUUID->"071d693b-02eb-4144-af51-79ee8493aa38"],
+Cell[CellGroupData[{
+Cell[1206, 39, 201, 4, 66, "Section",ExpressionUUID->"e78c1de1-8c99-4ef2-ba7b-dccf218c0e9b"],
+Cell[1410, 45, 885, 25, 107, "Code",ExpressionUUID->"bdbf9023-b829-4363-b6e6-27baee5bc5c9"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
