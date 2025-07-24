@@ -2,7 +2,7 @@
 
 This notebook contains all the analysis thus far required and done to explore how disease spread may be modulated by components of the landscape such as resource availability and temperature. 
 
-## Table of Contents:
+## Files:
    1. `01-co-location.nb`: transmission as a process of co-location on a weighted landscape 
    2. `02-constant-dist.nb`: transmission on a landscape with a known (constant) distribution
    3. `03-uniform-dist.nb`: transmission on a landscape with a known (uniform) distribution
