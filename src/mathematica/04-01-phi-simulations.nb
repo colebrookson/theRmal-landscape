@@ -1,0 +1,495 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Wolfram 14.2' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       154,          7]
+NotebookDataLength[     19351,        487]
+NotebookOptionsPosition[     18656,        466]
+NotebookOutlinePosition[     19048,        482]
+CellTagsIndexPosition[     19005,        479]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Phi on a landscape", "Title",
+ CellChangeTimes->{{3.964261995209104*^9, 3.964262017218626*^9}, {
+  3.964562662008245*^9, 
+  3.9645626623666067`*^9}},ExpressionUUID->"fcb63678-206c-4a2c-8e00-\
+2a7da6557d00"],
+
+Cell["\<\
+We want to show how the landscape-level phi value can affect things like time \
+to extinction, but also look at how a theoretically calculated vs a simulated \
+R0 value compare. 
+
+What this will look like is: 
+- Setting up some simulations to look at how changing R0 will change the \
+results. Goal here is to:
+\t1. Loop over phi {0.2, 0.4, 0.6, 0.8, 1.0}
+\t2. For each phi, compute:
+\t\t-extinction time per run
+\t\t-mean & variance of infected counts over time
+\t\t-max proportion infected
+\t\t-epidemic size
+\t\t-duration above threshold (e.g. It>10It\:200b>10)
+\t3. Aggregate summary statistics across 1000 simulations\
+\>", "Text",
+ CellChangeTimes->{{3.964262053252982*^9, 3.964262090084059*^9}, {
+  3.9642621423086653`*^9, 3.964262202562505*^9}, {3.9645626653698378`*^9, 
+  3.9645626966370163`*^9}},ExpressionUUID->"70da9c5c-6977-4663-aa1a-\
+6519d09da861"],
+
+Cell[CellGroupData[{
+
+Cell["Phi changing persistence of pathogen", "Section",
+ CellChangeTimes->{{3.954508007522275*^9, 3.9545080150302057`*^9}, 
+   3.9642619856356907`*^9, {3.9642622180219307`*^9, 3.964262225227853*^9}, {
+   3.9645627045948668`*^9, 
+   3.964562704983183*^9}},ExpressionUUID->"06c176f8-5354-4dbb-ab04-\
+07c6c64b8904"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{"1.", " ", "PARAMETERS", " ", "AND", " ", 
+     RowBox[{
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{
+          RowBox[{
+           RowBox[{
+            RowBox[{
+             RowBox[{
+              RowBox[{
+               RowBox[{
+                RowBox[{
+                 RowBox[{
+                  RowBox[{
+                   RowBox[{
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"SETUP", " ", "--"}], "--"}], "--"}], "--"}], 
+                    "--"}], "--"}], "--"}], "--"}], "--"}], "--"}], "--"}], 
+                   "--"}], "--"}], "--"}], "--"}], "--"}], "--"}], "--"}], 
+            "--"}], "--"}], "--"}], "--"}], "--"}], "--"}], "--"}]}], "-"}], 
+   " ", "*)"}], "\n", "\n", 
+  RowBox[{
+   RowBox[{"ClearAll", "[", "\"\<Global`*\>\"", "]"}], "\n", 
+   RowBox[{
+    RowBox[{"SeedRandom", "[", "123", "]"}], ";"}], " ", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+    "set", " ", "seed", " ", "so", " ", "stuff", " ", "is", " ", 
+     "reproducible"}], " ", "*)"}], "\n", 
+   RowBox[{"(*", 
+    RowBox[{"First", ",", " ", 
+     RowBox[{
+     "some", " ", "directory", " ", "stuff", " ", "for", " ", "outputting", " ",
+       "plot"}]}], "*)"}], "\n", 
+   RowBox[{
+    RowBox[{
+    "baseDir", "=", "\"\</Users/colebrookson/github/theRmal-landscape/\>\""}],
+     ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"figsDir", " ", "=", " ", 
+     RowBox[{"FileNameJoin", "[", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"NotebookDirectory", "[", "]"}], ",", " ", "\"\<..\>\"", ",", 
+        " ", "\"\<..\>\"", ",", " ", "\"\<figs\>\"", ",", " ", "\"\<si\>\"", ",",
+         " ", "\"\<r0-simulations\>\""}], "}"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"relativePath", "[", "parts__", "]"}], ":=", 
+     RowBox[{"FileNameJoin", "[", 
+      RowBox[{"{", 
+       RowBox[{"baseDir", ",", "parts"}], "}"}], "]"}]}], ";"}], "\n", "\n", 
+   RowBox[{
+    RowBox[{"numPatches", " ", "=", " ", "200000"}], ";"}], " ", 
+   RowBox[{"(*", " ", 
+    RowBox[{"number", " ", "of", " ", "spatial", " ", "patches"}], " ", 
+    "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"initialInfected", " ", "=", " ", "1"}], ";"}], " ", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+    "start", " ", "with", " ", "just", " ", "one", " ", "infected", " ", 
+     "person"}], " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"r0Values", " ", "=", " ", 
+     RowBox[{"Range", "[", 
+      RowBox[{"0.8", ",", " ", "2.6", ",", " ", "0.2"}], "]"}]}], ";"}], " ", 
+   
+   RowBox[{"(*", " ", 
+    RowBox[{
+     RowBox[{"range", " ", "of", " ", "quasi"}], "-", 
+     RowBox[{"r0", " ", "values"}]}], " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"numReps", " ", "=", " ", "100"}], ";"}], " ", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+    "how", " ", "many", " ", "runs", " ", "to", " ", "average", " ", "over"}],
+     " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"maxTime", " ", "=", " ", "100"}], ";"}], " ", 
+   RowBox[{"(*", " ", 
+    RowBox[{"max", " ", "timesteps", " ", "per", " ", "run"}], " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"threshold", " ", "=", " ", "100000"}], ";"}], " ", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+    "for", " ", "tracking", " ", "how", " ", "long", " ", "the", " ", 
+     "outbreak", " ", "stays", " ", "\"\<big\>\""}], " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"weights", " ", "=", " ", 
+     RowBox[{"ConstantArray", "[", 
+      RowBox[{
+       RowBox[{"1", "/", "numPatches"}], ",", " ", "numPatches"}], "]"}]}], 
+    ";"}], " ", 
+   RowBox[{"(*", " ", 
+    RowBox[{"uniform", " ", "patch", " ", "weight"}], " ", "*)"}], "\n", "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+     RowBox[{"2.", " ", "FUNCTION", " ", "TO", " ", "RUN", " ", "ONE", " ", 
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{
+          RowBox[{
+           RowBox[{
+            RowBox[{
+             RowBox[{
+              RowBox[{
+               RowBox[{
+                RowBox[{
+                 RowBox[{
+                  RowBox[{
+                   RowBox[{
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"SIMULATION", " ", "--"}], "--"}], "--"}], "--"}],
+                     "--"}], "--"}], "--"}], "--"}], "--"}], "--"}], "--"}], 
+               "--"}], "--"}], "--"}], "--"}], "--"}], "--"}], "--"}], "--"}],
+        "--"}]}], "-"}], " ", "*)"}], "\n", "\n", 
+   RowBox[{
+    RowBox[{"simulateRun", "[", "totalIndividuals_", "]"}], " ", ":=", " ", 
+    RowBox[{"Module", "[", "\n", "  ", 
+     RowBox[{
+      RowBox[{"{", "\n", "    ", 
+       RowBox[{
+        RowBox[{"t", " ", "=", " ", "0"}], ",", " ", 
+        RowBox[{"NI", " ", "=", " ", "initialInfected"}], ",", " ", 
+        RowBox[{"NT", " ", "=", " ", "totalIndividuals"}], ",", "\n", "    ", 
+        
+        RowBox[{"infectedHistory", " ", "=", " ", 
+         RowBox[{"{", "}"}]}], ",", " ", "Sloc", ",", " ", "Iloc", ",", " ", 
+        "cloc"}], "\n", "  ", "}"}], ",", "\n", "\n", "  ", 
+      RowBox[{"(*", " ", 
+       RowBox[{"while", " ", 
+        RowBox[{"there", "'"}], "s", " ", "still", " ", "infecteds", " ", 
+        "and", " ", "we", " ", 
+        RowBox[{"haven", "'"}], "t", " ", "hit", " ", "time", " ", "limit"}], 
+       " ", "*)"}], "\n", "  ", 
+      RowBox[{
+       RowBox[{"While", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"NI", " ", ">", " ", "0"}], " ", "&&", " ", 
+          RowBox[{"t", " ", "<", " ", "maxTime"}]}], ",", "\n", "  ", "\n", 
+         "    ", 
+         RowBox[{"(*", " ", 
+          RowBox[{
+          "randomly", " ", "assign", " ", "susceptibles", " ", "and", " ", 
+           "infecteds", " ", "to", " ", "patches"}], " ", "*)"}], "\n", 
+         "    ", 
+         RowBox[{
+          RowBox[{"Sloc", " ", "=", " ", 
+           RowBox[{"RandomChoice", "[", 
+            RowBox[{
+             RowBox[{"weights", " ", "->", " ", 
+              RowBox[{"Range", "[", 
+               RowBox[{"1", ",", " ", "numPatches"}], "]"}]}], ",", " ", 
+             RowBox[{"NT", " ", "-", " ", "NI"}]}], "]"}]}], ";", "\n", 
+          "    ", 
+          RowBox[{"Iloc", " ", "=", " ", 
+           RowBox[{"RandomChoice", "[", 
+            RowBox[{
+             RowBox[{"weights", " ", "->", " ", 
+              RowBox[{"Range", "[", 
+               RowBox[{"1", ",", " ", "numPatches"}], "]"}]}], ",", " ", 
+             "NI"}], "]"}]}], ";", "\n", "\n", "    ", 
+          RowBox[{"(*", " ", 
+           RowBox[{
+           "get", " ", "list", " ", "of", " ", "patch", " ", "IDs", " ", 
+            "that", " ", "have", " ", "both", " ", "S", " ", "and", " ", 
+            "I"}], " ", "*)"}], "\n", "    ", 
+          RowBox[{"cloc", " ", "=", " ", 
+           RowBox[{"Intersection", "[", 
+            RowBox[{"Sloc", ",", " ", "Iloc"}], "]"}]}], ";", "\n", "\n", 
+          "    ", 
+          RowBox[{"(*", " ", 
+           RowBox[{
+            RowBox[{
+            "count", " ", "how", " ", "many", " ", "susceptibles", " ", 
+             "were", " ", "in", " ", "those", " ", "shared", " ", "patches"}],
+             " ", "=", " ", 
+            RowBox[{"new", " ", "infecteds"}]}], " ", "*)"}], "\n", "    ", 
+          RowBox[{"NI", " ", "=", " ", 
+           RowBox[{"Total", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"Count", "[", 
+               RowBox[{"Sloc", ",", " ", "#"}], "]"}], " ", "&"}], " ", "/@", 
+             " ", "cloc"}], "]"}]}], ";", "\n", "\n", "    ", 
+          RowBox[{"(*", " ", 
+           RowBox[{
+           "store", " ", "current", " ", "number", " ", "of", " ", 
+            "infecteds"}], " ", "*)"}], "\n", "    ", 
+          RowBox[{"infectedHistory", " ", "=", " ", 
+           RowBox[{"Append", "[", 
+            RowBox[{"infectedHistory", ",", " ", "NI"}], "]"}]}], ";", "\n", 
+          "    ", 
+          RowBox[{"t", "++"}]}]}], "\n", "  ", "]"}], ";", "\n", "\n", "  ", 
+       RowBox[{"(*", " ", 
+        RowBox[{
+        "return", " ", "summary", " ", "stats", " ", "for", " ", "the", " ", 
+         "run"}], " ", "*)"}], "\n", "  ", 
+       RowBox[{"<|", "\n", "    ", 
+        RowBox[{
+         RowBox[{"\"\<ExtinctionTime\>\"", " ", "->", " ", "t"}], ",", "\n", 
+         "    ", 
+         RowBox[{"\"\<InfectedTimeSeries\>\"", " ", "->", " ", 
+          "infectedHistory"}], ",", "\n", "    ", 
+         RowBox[{"\"\<MaxProportionInfected\>\"", " ", "->", " ", 
+          RowBox[{
+           RowBox[{"Max", "[", "infectedHistory", "]"}], "/", 
+           "totalIndividuals"}]}], ",", "\n", "    ", 
+         RowBox[{"\"\<EpidemicSize\>\"", " ", "->", " ", 
+          RowBox[{"Total", "[", "infectedHistory", "]"}]}], ",", "\n", "    ", 
+         RowBox[{"\"\<DurationAboveThreshold\>\"", " ", "->", " ", 
+          RowBox[{"Count", "[", 
+           RowBox[{"infectedHistory", ",", " ", 
+            RowBox[{"x_", " ", "/;", " ", 
+             RowBox[{"x", " ", ">", " ", "threshold"}]}]}], "]"}]}]}], "\n", 
+        "  ", "|>"}]}]}], "\n", "]"}]}], "\n", "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+     RowBox[{"2.1", " ", "FASTER", " ", "FUNCTION", " ", 
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{
+          RowBox[{
+           RowBox[{
+            RowBox[{
+             RowBox[{
+              RowBox[{
+               RowBox[{
+                RowBox[{
+                 RowBox[{
+                  RowBox[{
+                   RowBox[{
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"MAYBE", " ", "--"}], "--"}], "--"}], "--"}], 
+                    "--"}], "--"}], "--"}], "--"}], "--"}], "--"}], "--"}], 
+                   "--"}], "--"}], "--"}], "--"}], "--"}], "--"}], "--"}], 
+            "--"}], "--"}], "--"}], "--"}], "--"}], "--"}]}], "-"}], " ", 
+    "*)"}], "\n", 
+   RowBox[{"ClearAll", "[", "simulateRunSparse", "]"}], "\n", "\n", 
+   RowBox[{
+    RowBox[{"simulateRunSparse", "[", "totalIndividuals_", "]"}], " ", ":=", 
+    " ", 
+    RowBox[{"Module", "[", "\n", "  ", 
+     RowBox[{
+      RowBox[{"{", "\n", "    ", 
+       RowBox[{
+        RowBox[{"t", " ", "=", " ", "0"}], ",", "\n", "    ", 
+        RowBox[{"IT", " ", "=", " ", "initialInfected"}], ",", "         ", 
+        RowBox[{"(*", " ", 
+         RowBox[{"current", " ", "infecteds"}], " ", "*)"}], "\n", "    ", 
+        RowBox[{"NT", " ", "=", " ", "totalIndividuals"}], ",", "        ", 
+        RowBox[{"(*", " ", 
+         RowBox[{"total", " ", "population"}], " ", "*)"}], "\n", "    ", 
+        RowBox[{"history", " ", "=", " ", 
+         RowBox[{"{", "}"}]}], ",", "                 ", 
+        RowBox[{"(*", " ", 
+         RowBox[{"time", "-", 
+          RowBox[{"series", " ", "record"}]}], " ", "*)"}], "\n", "    ", 
+        "occ", ",", " ", "patchSample", ",", " ", "numInfPatches", ",", " ", 
+        "sus", ",", " ", "p", ",", " ", "newInf", ",", "\n", "    ", 
+        RowBox[{"P", " ", "=", " ", "numPatches"}]}], "\n", "  ", "}"}], ",", 
+      "\n", "\n", "  ", 
+      RowBox[{
+       RowBox[{"occ", " ", "=", " ", 
+        RowBox[{"SparseArray", "[", 
+         RowBox[{
+          RowBox[{"{", "}"}], ",", " ", 
+          RowBox[{"{", "P", "}"}]}], "]"}]}], ";", "     ", 
+       RowBox[{"(*", " ", 
+        RowBox[{"initialise", " ", "empty", " ", "occupancy", " ", "vector"}],
+         " ", "*)"}], "\n", "\n", "  ", 
+       RowBox[{"While", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"IT", " ", ">", " ", "0"}], " ", "&&", " ", 
+          RowBox[{"t", " ", "<", " ", "maxTime"}]}], ",", "\n", "\n", "    ", 
+         
+         RowBox[{"(*", " ", 
+          RowBox[{
+           RowBox[{"1", "\:2006"}], "\[LongDash]", 
+           RowBox[{
+           "\:2006drop", " ", "infecteds", " ", "on", " ", "patches", " ", 
+            RowBox[{"(", 
+             RowBox[{"sparse", " ", "update"}], ")"}]}]}], " ", "*)"}], "\n", 
+         "    ", 
+         RowBox[{
+          RowBox[{"patchSample", " ", "=", " ", 
+           RowBox[{"RandomInteger", "[", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", " ", "P"}], "}"}], ",", " ", "IT"}], "]"}]}], 
+          ";", "\n", "    ", 
+          RowBox[{"occ", " ", "+=", " ", 
+           RowBox[{"SparseArray", "[", 
+            RowBox[{
+             RowBox[{"Normal", "[", 
+              RowBox[{"Counts", "[", "patchSample", "]"}], "]"}], ",", " ", 
+             RowBox[{"{", "P", "}"}]}], "]"}]}], ";", "\n", "\n", "    ", 
+          RowBox[{"(*", " ", 
+           RowBox[{
+            RowBox[{"2", "\:2006"}], "\[LongDash]", 
+            RowBox[{
+             RowBox[{
+             "\:2006how", " ", "many", " ", "patches", " ", "now", " ", 
+              "have"}], " ", "\[GreaterEqual]", 
+             RowBox[{"1", " ", 
+              RowBox[{"infected", "?"}]}]}]}], " ", "*)"}], "\n", "    ", 
+          RowBox[{"numInfPatches", " ", "=", " ", 
+           RowBox[{"Length", "@", 
+            RowBox[{"occ", "[", "\"\<NonzeroPositions\>\"", "]"}]}]}], ";", 
+          "\n", "\n", "    ", 
+          RowBox[{"(*", " ", 
+           RowBox[{
+            RowBox[{"3", "\:2006"}], "\[LongDash]", 
+            RowBox[{
+            "\:2006draw", " ", "new", " ", "infections", " ", "among", " ", 
+             "susceptibles"}]}], "             ", "*)"}], "\n", "    ", 
+          RowBox[{"sus", " ", "=", " ", 
+           RowBox[{"NT", " ", "-", " ", "IT"}]}], ";", "                ", 
+          RowBox[{"(*", " ", 
+           RowBox[{"susceptibles", " ", "this", " ", "step"}], "   ", "*)"}], 
+          "\n", "    ", 
+          RowBox[{"p", "   ", "=", " ", 
+           RowBox[{
+            RowBox[{"N", "[", "numInfPatches", "]"}], "/", "P"}]}], ";", 
+          "     ", 
+          RowBox[{"(*", " ", 
+           RowBox[{"share", "-", "a", "-", 
+            RowBox[{"patch", " ", "probability"}]}], "*)"}], "\n", "    ", 
+          RowBox[{"newInf", " ", "=", " ", 
+           RowBox[{"If", "[", 
+            RowBox[{
+             RowBox[{"sus", " ", "<=", " ", "0"}], ",", "\n", 
+             "                ", "0", ",", "\n", "                ", 
+             RowBox[{"RandomVariate", "[", 
+              RowBox[{"BinomialDistribution", "[", 
+               RowBox[{"sus", ",", " ", "p"}], "]"}], "]"}]}], "\n", 
+            "              ", "]"}]}], ";", "\n", "\n", "    ", 
+          RowBox[{"(*", " ", 
+           RowBox[{
+            RowBox[{"4", "\:2006"}], "\[LongDash]", 
+            RowBox[{"\:2006book", "-", "keeping"}]}], " ", "*)"}], "\n", 
+          "    ", 
+          RowBox[{"AppendTo", "[", 
+           RowBox[{"history", ",", " ", "IT"}], "]"}], ";", "\n", "    ", 
+          RowBox[{"IT", "  ", "=", " ", "newInf"}], ";", "\n", "    ", 
+          RowBox[{"occ", " ", "=", " ", 
+           RowBox[{"SparseArray", "[", 
+            RowBox[{
+             RowBox[{"{", "}"}], ",", " ", 
+             RowBox[{"{", "P", "}"}]}], "]"}]}], ";", "   ", 
+          RowBox[{"(*", " ", 
+           RowBox[{
+           "infecteds", " ", "die", " ", "after", " ", "one", " ", "step"}], 
+           " ", "*)"}], "\n", "    ", 
+          RowBox[{"t", "++"}]}]}], "\n", "  ", "]"}], ";", "\n", "\n", "  ", 
+       RowBox[{"<|", "\n", "    ", 
+        RowBox[{
+         RowBox[{"\"\<ExtinctionTime\>\"", "         ", "->", " ", "t"}], ",",
+          "\n", "    ", 
+         RowBox[{"\"\<InfectedTimeSeries\>\"", "     ", "->", " ", 
+          "history"}], ",", "\n", "    ", 
+         RowBox[{"\"\<MaxProportionInfected\>\"", "  ", "->", " ", 
+          RowBox[{
+           RowBox[{"Max", "[", "history", "]"}], "/", "totalIndividuals"}]}], 
+         ",", "\n", "    ", 
+         RowBox[{"\"\<EpidemicSize\>\"", "           ", "->", " ", 
+          RowBox[{"Total", "[", "history", "]"}]}], ",", "\n", "    ", 
+         RowBox[{"\"\<DurationAboveThreshold\>\"", " ", "->", " ", 
+          RowBox[{"Count", "[", 
+           RowBox[{"history", ",", " ", 
+            RowBox[{"x_", " ", "/;", " ", 
+             RowBox[{"x", " ", ">", " ", "threshold"}]}]}], "]"}]}]}], "\n", 
+        "  ", "|>"}]}]}], "\n", "]"}]}], "\n"}]}]], "Code",ExpressionUUID->\
+"cd46d3ab-7147-49b4-8a18-8ee4d8f5d916"]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{808, 866},
+WindowMargins->{{4, Automatic}, {Automatic, 4}},
+FrontEndVersion->"14.2 for Mac OS X ARM (64-bit) (March 16, 2025)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"cdf77d77-f0cb-4bf3-b3da-51efd97aa60a"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[576, 22, 212, 4, 96, "Title",ExpressionUUID->"fcb63678-206c-4a2c-8e00-2a7da6557d00"],
+Cell[791, 28, 873, 20, 296, "Text",ExpressionUUID->"70da9c5c-6977-4663-aa1a-6519d09da861"],
+Cell[CellGroupData[{
+Cell[1689, 52, 312, 5, 66, "Section",ExpressionUUID->"06c176f8-5354-4dbb-ab04-07c6c64b8904"],
+Cell[2004, 59, 16624, 403, 1936, "Code",ExpressionUUID->"cd46d3ab-7147-49b4-8a18-8ee4d8f5d916"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
